@@ -16,7 +16,7 @@ public class Folder {
 
     private String name;
 
-    private String dir;
+    private Integer dir;
 
     private Integer secret;
 

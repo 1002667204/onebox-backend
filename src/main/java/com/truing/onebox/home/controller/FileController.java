@@ -15,9 +15,17 @@ import java.util.List;
  * @Date 2022/8/13 16:17
  * @Version 1.0
  */
+@RequestMapping("/api/storage")
 @RestController
 public class FileController {
 
+    /**
+     * 获取文件列表
+     */
+    @PostMapping("/files")
+    public AjaxJson<List<FileItem>> list(String name){
+        return null;
+    }
 
 
 
