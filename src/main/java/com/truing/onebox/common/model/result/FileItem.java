@@ -1,4 +1,4 @@
-package com.truing.onebox.home.model.dto;
+package com.truing.onebox.common.model.result;
 
 import lombok.Data;
 

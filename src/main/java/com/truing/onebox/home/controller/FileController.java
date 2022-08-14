@@ -1,7 +1,7 @@
 package com.truing.onebox.home.controller;
 
 import com.truing.onebox.common.utils.AjaxJson;
-import com.truing.onebox.home.model.dto.FileItem;
+import com.truing.onebox.common.model.result.FileItem;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

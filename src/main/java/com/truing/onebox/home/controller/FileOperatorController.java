@@ -1,7 +1,7 @@
 package com.truing.onebox.home.controller;
 
 import com.truing.onebox.common.utils.AjaxJson;
-import com.truing.onebox.home.model.dto.Folder;
+import com.truing.onebox.common.model.dto.Folder;
 import com.truing.onebox.home.service.FileService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -60,6 +60,7 @@ public class FileOperatorController {
 
     /**
      * 重命名文件夹
+     * 重命名文件夹后是不是要修改该文件夹下所有文件的dir
      * @param
      * @return
      */

@@ -1,7 +1,7 @@
 package com.truing.onebox.admin.controller;
 
 import com.truing.onebox.common.utils.AjaxJson;
-import com.truing.onebox.home.model.dto.ClassInfo;
+import com.truing.onebox.common.model.dto.ClassInfo;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,37 +18,24 @@ public class SettingController {
         return null;
     }
 
-    /**
-     * 添加后缀
-     */
-    @PostMapping("/ext/add")
-    public AjaxJson<?> addExt(Integer id, String newExt){
-        return null;
-    }
 
-    /**
-     * 删除后缀
-     */
-    @PostMapping("/ext/delete")
-    public AjaxJson<?> deleteExt(Integer id, String newExt){
-        return null;
-    }
+    // 每次修改设置后前端都返回整个文件分类表
 
+//    /**
+//     * 添加后缀
+//     */
+//    @PostMapping("/ext/add")
+//    public AjaxJson<?> addExt(Integer id, String newExt){
+//        return null;
+//    }
+//
+//    /**
+//     * 删除后缀
+//     */
+//    @PostMapping("/ext/delete")
+//    public AjaxJson<?> deleteExt(Integer id, String newExt){
+//        return null;
+//    }
 
-    /**
-     * 添加类别
-     */
-    @PostMapping("/class/add")
-    public AjaxJson<?> addClass(ClassInfo classInfo){
-        return null;
-    }
-
-    /**
-     * 删除类别
-     */
-    @PostMapping("/class/delete")
-    public AjaxJson<?> deleteClass(String newExt){
-        return null;
-    }
 
 }
