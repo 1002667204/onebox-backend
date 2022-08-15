@@ -1,16 +1,15 @@
 package com.truing.onebox.home.controller;
 
 import com.truing.onebox.common.utils.AjaxJson;
-import com.truing.onebox.home.service.UploadService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -52,8 +51,10 @@ public class UploadController {
         // 处理文件重名问题
 
         // 进行上传
-        UploadService uploadService = new UploadService();
-        uploadService.uploadFile(filePath, file.getInputStream());
+//        UploadService uploadService = new UploadService();
+//        uploadService.uploadFile(filePath, file.getInputStream());
+        File file1 = new File(filePath + file.getOriginalFilename());
+        file.transferTo(file1);
 
         // 更新文件表
 

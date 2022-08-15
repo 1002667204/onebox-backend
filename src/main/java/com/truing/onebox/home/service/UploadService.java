@@ -25,7 +25,6 @@ public class UploadService {
 //        String uploadPath = StringUtils.removeDuplicateSlashes(baseFilePath + StringUtils.DELIMITER_STR + path);
 
         // 上传文件
-
 //        File uploadToFileObj = new File(uploadPath);
 //        BufferedOutputStream outputStream = FileUtil.getOutputStream(uploadToFileObj);
 //        IoUtil.copy(inputStream, outputStream);
