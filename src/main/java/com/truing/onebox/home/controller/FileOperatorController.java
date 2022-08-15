@@ -70,15 +70,6 @@ public class FileOperatorController {
     }
 
 
-    /**
-     * 上传文件
-     * @param
-     * @return
-     */
-    @PostMapping("/upload/file")
-    public AjaxJson<?> uploadFile(File file, String dir) {
-        return null;
-    }
 
     /**
      * 星标文件
