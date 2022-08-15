@@ -1,4 +1,4 @@
-package com.truing.onebox.common.mapper;
+package com.truing.onebox.admin.mapper;
 
 
 import com.truing.onebox.common.model.dto.User;
