@@ -28,4 +28,6 @@ public class FileInfo {
 
     private Integer inRecycled;
 
+    private Integer star;
+
 }

@@ -24,4 +24,6 @@ public class Folder {
 
     private String password;
 
+    private Integer star;
+
 }

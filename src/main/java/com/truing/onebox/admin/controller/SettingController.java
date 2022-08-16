@@ -6,15 +6,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/setting")
 public class SettingController {
 
     /**
      * 获取文件分类表
+     * @return AjaxJson<List<ClassInfo>>
      */
     @PostMapping("/class")
-    public AjaxJson<?> list(){
+    public AjaxJson<List<ClassInfo>> list(){
         return null;
     }
 

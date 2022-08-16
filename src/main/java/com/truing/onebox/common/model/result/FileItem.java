@@ -18,4 +18,6 @@ public class FileItem {
 
     private String type; // audio video folder sercetFolder
 
+    private Integer star;
+
 }

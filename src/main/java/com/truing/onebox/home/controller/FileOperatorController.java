@@ -76,8 +76,11 @@ public class FileOperatorController {
 
 
     /**
-     * 星标文件 AjaxJson.getSuccess()
+     * 设置文件星标状态 AjaxJson.getSuccess()
      */
     @PostMapping("/starred")
-    public AjaxJson<?> starredFile(Integer id){return null;}
+    public AjaxJson<?> starredFile(Integer id, Integer starred){
+        return null;
+    }
+
 }
