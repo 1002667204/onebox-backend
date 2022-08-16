@@ -16,6 +16,6 @@ public class FileItem {
 
     private Integer size;
 
-    private String type;
+    private String type; // audio video folder sercetFolder
 
 }

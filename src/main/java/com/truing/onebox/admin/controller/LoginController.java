@@ -20,6 +20,13 @@ import javax.servlet.http.HttpSession;
 @RequestMapping("/admin")
 public class LoginController {
 
+    /**
+     * 返回根目录文件列表
+     * @param username
+     * @param password
+     * @param session
+     * @return
+     */
     @PostMapping("/login")
     public AjaxJson<?> doLogin(String username, String password,HttpSession session) {
         String str = "zhangsan";
@@ -29,8 +36,11 @@ public class LoginController {
         }
         return AjaxJson.getError("登录失败, 账号或密码错误");
     }
+
+
+
     @PostMapping("/logout")
-    public AjaxJson<?> doLogout(HttpServletResponse response , HttpSession session){
+    public AjaxJson<?> doLogout(){
         return AjaxJson.getSuccess();
     }
 }
