@@ -1,6 +1,7 @@
 package com.truing.onebox.common.model.result;
 
 import com.truing.onebox.common.model.dto.FileInfo;
+import com.truing.onebox.common.model.dto.Folder;
 import lombok.Data;
 
 /**
@@ -25,6 +26,18 @@ public class FileItem {
 
     public FileItem(FileInfo fileInfo){
         this.name = fileInfo.getName();
+        this.ext = fileInfo.getExt();
+        this.size = fileInfo.getSize();
+        this.type = fileInfo.getType();
+        this.star = fileInfo.getStar();
+    }
+
+    public FileItem(Folder folder){
+        this.name = folder.getName();
+        this.ext = null;
+        this.size = null;
+        this.type = "folder";
+        this.star = folder.getStar();
     }
 
 }

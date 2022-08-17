@@ -11,7 +11,7 @@
  Target Server Version : 80029
  File Encoding         : 65001
 
- Date: 13/08/2022 23:21:22
+ Date: 16/08/2022 19:27:31
 */
 
 SET NAMES utf8mb4;
@@ -63,13 +63,14 @@ CREATE TABLE `file`  (
   `size` int NULL DEFAULT NULL,
   `real_path` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   `in_recycled` int NULL DEFAULT NULL,
+  `star` int NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of file
 -- ----------------------------
-INSERT INTO `file` VALUES (123456, '她来听我的演唱会', 125963, 'audio', '.mp3', 124585, '/', 0);
+INSERT INTO `file` VALUES (123456, '她来听我的演唱会', 125963, 'audio', '.mp3', 124585, '/', 0, 1);
 
 -- ----------------------------
 -- Table structure for folder
@@ -82,13 +83,14 @@ CREATE TABLE `folder`  (
   `secret` int NULL DEFAULT NULL,
   `in_recycled` int NULL DEFAULT NULL,
   `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `star` int NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of folder
 -- ----------------------------
-INSERT INTO `folder` VALUES (16256, '音乐收藏', 125632, 0, 0, NULL);
+INSERT INTO `folder` VALUES (16256, '音乐收藏', 125632, 0, 0, NULL, 0);
 
 -- ----------------------------
 -- Table structure for modify_log
