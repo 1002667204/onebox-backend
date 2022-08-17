@@ -1,5 +1,6 @@
 package com.truing.onebox.home.service;
 
+import com.truing.onebox.common.model.result.FileItem;
 import com.truing.onebox.common.utils.StringUtils;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.FileSystemResource;
@@ -31,7 +32,8 @@ public class DownloadService {
     public ResponseEntity<Resource> downloadToStream(Integer id) {
 
         // 获取要下载的文件（真实绝对路径）
-        File file = new File(StringUtils.removeDuplicateSlashes(StringUtils.DELIMITER_STR));
+//        File file = new File(StringUtils.removeDuplicateSlashes(StringUtils.DELIMITER_STR));
+        File file = new File("/Users/colin13/Desktop/banner.txt");
 
         // 判断文件是否存在
         if (!file.exists()) {
@@ -44,6 +46,7 @@ public class DownloadService {
         // 返回下载信息
         HttpHeaders headers = new HttpHeaders();
         String fileName = file.getName();
+
         // 设置以附件的形式下载文件
         headers.setContentDispositionFormData("attachment", StringUtils.encodeAllIgnoreSlashes(fileName));
 

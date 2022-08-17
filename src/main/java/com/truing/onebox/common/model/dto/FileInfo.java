@@ -1,6 +1,8 @@
 package com.truing.onebox.common.model.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @ClassName FileInfo
@@ -10,6 +12,8 @@ import lombok.Data;
  * @Version 1.0
  */
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class FileInfo {
 
     private Integer id;

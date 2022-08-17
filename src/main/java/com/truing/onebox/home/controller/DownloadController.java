@@ -25,12 +25,14 @@ public class DownloadController {
 
     /**
      * 下载文件
-     * @param id 文件id
+     * @param id
      * @return
      */
     @GetMapping("/download/**")
+//    @GetMapping("/download")
     @ResponseBody
     public ResponseEntity<org.springframework.core.io.Resource> downAttachment(Integer id) {
+//    public ResponseEntity<org.springframework.core.io.Resource> downAttachment() {
         // 获取下载文件路径
 //        String path = (String) httpServletRequest.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE);
 //        String bestMatchPattern = (String) httpServletRequest.getAttribute(HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE);
@@ -41,6 +43,7 @@ public class DownloadController {
         DownloadService downloadService = new DownloadService();
 
         return downloadService.downloadToStream(id);
+//        return downloadService.downloadToStream(0);
     }
 
 }

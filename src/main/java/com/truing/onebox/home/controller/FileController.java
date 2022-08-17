@@ -1,5 +1,6 @@
 package com.truing.onebox.home.controller;
 
+import com.truing.onebox.common.model.dto.FileInfo;
 import com.truing.onebox.common.utils.AjaxJson;
 import com.truing.onebox.common.model.result.FileItem;
 import org.springframework.web.bind.annotation.GetMapping;

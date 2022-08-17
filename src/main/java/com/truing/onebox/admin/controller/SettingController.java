@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -18,7 +19,11 @@ public class SettingController {
      */
     @PostMapping("/class")
     public AjaxJson<List<ClassInfo>> list(){
-        return null;
+        List<ClassInfo> classInfoList = new ArrayList<>();
+        classInfoList.add(new ClassInfo(132165, "audio", "mp3,flac,wav"));
+        classInfoList.add(new ClassInfo(1613652, "video", "mp4,mkv"));
+
+        return AjaxJson.getSuccessData(classInfoList);
     }
 
 

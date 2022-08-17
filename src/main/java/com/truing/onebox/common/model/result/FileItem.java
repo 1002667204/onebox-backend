@@ -1,5 +1,6 @@
 package com.truing.onebox.common.model.result;
 
+import com.truing.onebox.common.model.dto.FileInfo;
 import lombok.Data;
 
 /**
@@ -19,5 +20,11 @@ public class FileItem {
     private String type; // audio video folder sercetFolder
 
     private Integer star;
+
+    public FileItem(){}
+
+    public FileItem(FileInfo fileInfo){
+        this.name = fileInfo.getName();
+    }
 
 }

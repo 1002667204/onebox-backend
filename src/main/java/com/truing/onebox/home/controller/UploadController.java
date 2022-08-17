@@ -35,7 +35,7 @@ public class UploadController {
      */
     @PostMapping("/file/upload/**")
     @ResponseBody
-    public AjaxJson<?> upload(@RequestParam MultipartFile file, String dir) throws IOException {
+    public AjaxJson<?> upload(@RequestParam MultipartFile file, Integer dir) throws IOException {
         // 判断上传的文件是否为空
         if (file == null || file.isEmpty()) {
             return AjaxJson.getError("文件为空，无法上传.");
