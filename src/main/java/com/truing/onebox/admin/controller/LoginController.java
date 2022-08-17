@@ -38,7 +38,10 @@ public class LoginController {
     }
 
 
-
+    /**
+     * 退出登录
+     * @return AjaxJson.getSuccess()
+     */
     @PostMapping("/logout")
     public AjaxJson<?> doLogout(){
         return AjaxJson.getSuccess();
