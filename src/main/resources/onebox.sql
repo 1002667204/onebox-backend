@@ -11,7 +11,7 @@
  Target Server Version : 80029
  File Encoding         : 65001
 
- Date: 16/08/2022 19:27:31
+ Date: 18/08/2022 22:51:51
 */
 
 SET NAMES utf8mb4;
@@ -70,6 +70,7 @@ CREATE TABLE `file`  (
 -- ----------------------------
 -- Records of file
 -- ----------------------------
+INSERT INTO `file` VALUES (123, 'test', 12345, 'text', '.docx', 123, 'E:/java/truing/test.docx', 0, 1);
 INSERT INTO `file` VALUES (123456, '她来听我的演唱会', 125963, 'audio', '.mp3', 124585, '/', 0, 1);
 
 -- ----------------------------
@@ -117,14 +118,14 @@ CREATE TABLE `recycled`  (
   `id` int NOT NULL,
   `delete_time` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   `destroy_time` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-  `file_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `file_id` int NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of recycled
 -- ----------------------------
-INSERT INTO `recycled` VALUES (159623, '2022-08-12', '2022-09-12', '123456');
+INSERT INTO `recycled` VALUES (159623, '2022-08-12', '2022-09-12', 123456);
 
 -- ----------------------------
 -- Table structure for share
@@ -150,7 +151,7 @@ DROP TABLE IF EXISTS `starred`;
 CREATE TABLE `starred`  (
   `id` int NOT NULL,
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-  `dir` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `dir` int NULL DEFAULT NULL,
   `type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   `ext` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   `size` int NULL DEFAULT NULL,
