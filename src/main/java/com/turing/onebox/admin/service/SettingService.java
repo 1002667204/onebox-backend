@@ -1,6 +1,7 @@
 package com.turing.onebox.admin.service;
 
 import com.turing.onebox.common.model.dto.ClassInfo;
+import com.turing.onebox.common.model.result.SettingItem;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,6 +14,20 @@ public class SettingService {
      */
     public List<ClassInfo> classList() {
         return null;
+    }
+
+    /**
+     * 将文件分类表转换为设置结果类
+     */
+    public List<SettingItem> transforToSettingItem(List<ClassInfo> classInfoList){
+        return null;
+    }
+
+    /**
+     * 更新文件分类表
+     */
+    public boolean modify(){
+        return false;
     }
 
 //    /**

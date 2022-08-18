@@ -11,6 +11,10 @@ import java.util.List;
 @Data
 public class SettingItem {
 
-    private List<ClassInfo> classInfo;
+    private Integer id;
+
+    private String className;
+
+    private List<String> extList;
 
 }
