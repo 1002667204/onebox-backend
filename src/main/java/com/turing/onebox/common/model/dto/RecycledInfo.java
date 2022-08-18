@@ -16,7 +16,7 @@ public class RecycledInfo {
 
     private String deleteTime;
 
-    private String destoryTime;
+    private String destroyTime;
 
     private Integer fileId;
 

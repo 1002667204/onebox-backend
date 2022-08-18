@@ -14,7 +14,7 @@ public class ShareInfo {
 
     private Integer id;
 
-    private String readPath;
+    private String realPath;
 
     private String expireTime;
 

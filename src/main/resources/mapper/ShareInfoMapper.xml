@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.turing.onebox.home.mapper.ShareInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.turing.onebox.common.model.dto.ShareInfo" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="real_path" property="realPath" jdbcType="VARCHAR" />
+    <result column="expire_time" property="expireTime" jdbcType="VARCHAR" />
+    <result column="short_link" property="shortLink" jdbcType="VARCHAR" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from share
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.turing.onebox.common.model.dto.ShareInfo" >
+    insert into share (id, real_path, expire_time, 
+      short_link)
+    values (#{id,jdbcType=INTEGER}, #{realPath,jdbcType=VARCHAR}, #{expireTime,jdbcType=VARCHAR}, 
+      #{shortLink,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.turing.onebox.common.model.dto.ShareInfo" >
+    update share
+    set real_path = #{realPath,jdbcType=VARCHAR},
+      expire_time = #{expireTime,jdbcType=VARCHAR},
+      short_link = #{shortLink,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select id, real_path, expire_time, short_link
+    from share
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, real_path, expire_time, short_link
+    from share
+  </select>
+</mapper>
