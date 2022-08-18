@@ -4,10 +4,11 @@ import java.util.UUID;
 
 public class UUIDUtils {
     /**
-     * 回去uuid的值
+     * 返回uuid的值
      * @return
      */
-    public static String getUUID(){
-        return UUID.randomUUID().toString().replaceAll("-","");
+    public static Integer getUUID(){
+//        return UUID.randomUUID().toString().replaceAll("-","");
+        return UUID.randomUUID().hashCode();
     }
 }
