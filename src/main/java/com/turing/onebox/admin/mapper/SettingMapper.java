@@ -18,6 +18,6 @@ public interface SettingMapper {
 
     List<ClassInfo> selectAllClassInfo();
 
-    Integer updateClassInfo(@Param("id") Integer id, @Param("className") String className, @Param("include") String include);
+    Integer updateClassInfo(@Param("id") Integer id, @Param("className") String className, @Param("ext") String ext);
 
 }

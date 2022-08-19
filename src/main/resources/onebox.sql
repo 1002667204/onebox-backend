@@ -24,15 +24,18 @@ DROP TABLE IF EXISTS `config_class`;
 CREATE TABLE `config_class`  (
   `id` int NOT NULL,
   `class_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-  `include` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `ext` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of config_class
 -- ----------------------------
-INSERT INTO `config_class` VALUES (132165, 'audio', 'mp3,flac,wav');
-INSERT INTO `config_class` VALUES (1613652, 'video', 'mp4,mkv');
+INSERT INTO `config_class` VALUES (132165, 'audio', 'mp3');
+INSERT INTO `config_class` VALUES (132166, 'audio', 'flac');
+INSERT INTO `config_class` VALUES (132167, 'audio', 'wav');
+INSERT INTO `config_class` VALUES (1613652, 'video', 'mp4');
+INSERT INTO `config_class` VALUES (1613653, 'video', 'mkv');
 
 -- ----------------------------
 -- Table structure for config_user

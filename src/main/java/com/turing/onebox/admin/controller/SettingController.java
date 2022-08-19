@@ -24,12 +24,9 @@ public class SettingController {
      * @return AjaxJson<List<SettingItem>>
      */
     @PostMapping("/class")
-    public AjaxJson<List<SettingItem>> list(){
-        List<ClassInfo> classInfoList = new ArrayList<>();
-        classInfoList.add(new ClassInfo(132165, "audio", "mp3,flac,wav"));
-        classInfoList.add(new ClassInfo(1613652, "video", "mp4,mkv"));
-
-        return AjaxJson.getSuccessData(settingService.transforToSettingItem(classInfoList));
+    public AjaxJson<List<ClassInfo>> list(){
+        List<ClassInfo> classInfoList = settingService.getClassList();
+        return AjaxJson.getSuccessData(classInfoList);
     }
 
 

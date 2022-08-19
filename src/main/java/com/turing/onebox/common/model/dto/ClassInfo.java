@@ -18,6 +18,6 @@ public class ClassInfo {
 
     private String className;
 
-    private String include;
+    private String ext;
 
 }
