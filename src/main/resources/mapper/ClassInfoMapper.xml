@@ -31,4 +31,17 @@
     select id, class_name, ext
     from config_class
   </select>
+
+  <update id="updateClassInfo" parameterType="classInfo">
+    replace into config_class values (#{id}, #{className,}, #{ext})
+  </update>
+
+  <delete id="clearClassInfo">
+    delete from config_class
+  </delete>
+
+  <select id="selectAllClassInfo" resultType="com.turing.onebox.common.model.dto.ClassInfo">
+    select * from config_class
+  </select>
+
 </mapper>

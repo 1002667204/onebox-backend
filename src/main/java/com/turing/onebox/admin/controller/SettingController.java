@@ -1,13 +1,12 @@
 package com.turing.onebox.admin.controller;
 
+import cn.hutool.json.JSONArray;
 import com.turing.onebox.admin.service.SettingService;
 import com.turing.onebox.common.model.result.SettingItem;
 import com.turing.onebox.common.utils.AjaxJson;
 import com.turing.onebox.common.model.dto.ClassInfo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +28,17 @@ public class SettingController {
         return AjaxJson.getSuccessData(classInfoList);
     }
 
+    /**
+     * 保存设置
+     */
+    @PostMapping("/save")
+    public AjaxJson<?> saveAllSetting(@RequestBody List<ClassInfo> newClassInfoList){
+        if (settingService.updateClassList(newClassInfoList)){
+            return AjaxJson.getSuccess("保存成功");
+        } else {
+            return AjaxJson.getError("保存失败");
+        }
+    }
 
     // 每次修改设置后前端都返回整个文件分类表
 

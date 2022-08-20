@@ -16,8 +16,4 @@ import java.util.List;
 @Repository
 public interface SettingMapper {
 
-    List<ClassInfo> selectAllClassInfo();
-
-    Integer updateClassInfo(@Param("id") Integer id, @Param("className") String className, @Param("ext") String ext);
-
 }

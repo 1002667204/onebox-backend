@@ -16,4 +16,10 @@ public interface ClassInfoMapper {
     List<ClassInfo> selectAll();
 
     int updateByPrimaryKey(ClassInfo record);
+
+    List<ClassInfo> selectAllClassInfo();
+
+    Integer updateClassInfo(ClassInfo classInfo);
+
+    Integer clearClassInfo();
 }
