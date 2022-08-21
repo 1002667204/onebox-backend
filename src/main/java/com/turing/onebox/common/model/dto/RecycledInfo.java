@@ -26,4 +26,14 @@ public class RecycledInfo {
 
     private Integer fileId;
 
+    public RecycledInfo() {
+
+    }
+    public RecycledInfo(Integer id){
+        this.id = UUIDUtils.getUUID();
+        this.deleteTime = DateUtils.formateDateTime(new Date());
+        this.destroyTime = DateUtils.future30Days(new Date());
+        this.id = id;
+
+    }
 }

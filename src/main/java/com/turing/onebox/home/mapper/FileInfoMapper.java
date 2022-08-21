@@ -132,5 +132,7 @@ public interface FileInfoMapper {
 
     List<FileInfo> getFileInfoByDirId(Integer id);
 
-    int updateByFileId(Integer id);
+    int editFileRecycledByFileId(Integer id);
+
+    int editFileRecycledByFolderId(Integer id);
 }

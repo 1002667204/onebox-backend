@@ -1,11 +1,13 @@
 package com.turing.onebox.home.service;
 
 import com.turing.onebox.common.model.dto.FileInfo;
+import com.turing.onebox.common.model.dto.RecycledInfo;
 import com.turing.onebox.common.model.dto.StarredInfo;
 import com.turing.onebox.common.model.result.FileItem;
 import com.turing.onebox.common.model.dto.Folder;
-import com.turing.onebox.home.mapper.FileInfoMapper;
-import com.turing.onebox.home.mapper.StarredInfoMapper;
+import com.turing.onebox.common.utils.DateUtils;
+import com.turing.onebox.common.utils.UUIDUtils;
+import com.turing.onebox.home.mapper.*;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -17,11 +19,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.xml.crypto.Data;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 
 @Service
@@ -32,6 +37,12 @@ public class FileService {
 
     @Autowired
     private StarredInfoMapper starredInfoMapper;
+
+    @Autowired
+    private FolderMapper folderMapper;
+
+    @Autowired
+    private RecycledInfoMapper recycledInfoMapper;
 
     /**
      * 获取文件列表
@@ -122,9 +133,33 @@ public class FileService {
      * @return
      */
     public boolean deleteFolder(Integer id) {
-        return fileInfoMapper.deleteFolder(id);
+        if (0 ==folderMapper.editFolderRecycledById(id)){
+            return false;
+        }else {
+            fileInfoMapper.editFileRecycledByFolderId(id);
+            RecycledInfo recycledInfo = new RecycledInfo(id);
+            recycledInfoMapper.insert(recycledInfo);
+            return true;
+        }
     }
 
+    /**
+     * 彻底删除文件夹(删除文件夹表中的记录，同时彻底删除该文件夹内的文件和文件夹)
+     * TODO
+     */
+    public boolean removeFolder(Integer id){
+        // 删除文件夹表中的记录
+        if (folderMapper.deleteByPrimaryKey(id) == 0) return false;
+        // 彻底删除文件夹内的文件
+        int count = 0;
+        for (FileInfo fileInfo : fileInfoMapper.seleteFileByDir(id)) {
+            if (removeFile(fileInfo.getId())) count++;
+        }
+        return (count > 0);
+
+        // 删除文件夹内的文件夹
+
+    }
 
     /**
      * 文件重命名

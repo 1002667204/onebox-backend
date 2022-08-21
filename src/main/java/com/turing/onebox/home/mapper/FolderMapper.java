@@ -18,5 +18,7 @@ public interface FolderMapper {
 
     int updateByPrimaryKey(Folder record);
 
-    int updateByFolderId(Integer id);
+    int editFolderRecycledById(Integer id);
+
+
 }

@@ -66,9 +66,14 @@
     select * from file where dir = #{id}
   </select>
 
-  <update id="updateByFileId" parameterType="java.lang.Integer" >
+  <update id="editFileRecycledByFileId" parameterType="java.lang.Integer" >
     update file
-      set in_recycled = 0
+      set in_recycled = 1
     where id=#{id,jdbcType=INTEGER}
+  </update>
+  <update id="editFileRecycledByFolderId" parameterType="java.lang.Integer">
+    update file
+     set in_recycled = 1
+    where dir =#{id,jdbcType=INTEGER}
   </update>
 </mapper>

@@ -33,6 +33,9 @@ public class RecycledService {
     private FileInfoMapper fileInfoMapper;
     @Resource
     private FolderMapper folderMapper;
+
+    @Resource
+    private FileService fileService;
     /**
      * 获取回收站文件列表
      */
@@ -53,9 +56,13 @@ public class RecycledService {
                     recycledInfoMapper.deleteByPrimaryKey(id);
                     //删除文件夹表和文件表记
                     //缺少删除实际文件方法
-                    if (1 != fileInfoMapper.deleteByPrimaryKey(recycledInfo.getFileId())){
+                    if (1 == fileInfoMapper.deleteByPrimaryKey(recycledInfo.getFileId())){
+                        fileService.removeFile(id);
+                    }else {
                         folderMapper.deleteByPrimaryKey(recycledInfo.getFileId());
+                        fileService.removeFolder(id);
                     }
+
                     //删除返回值记录
                     iter.remove();
                 }else {
@@ -85,8 +92,11 @@ public class RecycledService {
                 recycledInfoMapper.deleteByPrimaryKey(recycledInfo.getId());
                 //删除文件夹表和文件表记录
                 //缺少删除实际文件方法
-                if (1 != fileInfoMapper.deleteByPrimaryKey(recycledInfo.getFileId())){
+                if (1 == fileInfoMapper.deleteByPrimaryKey(recycledInfo.getFileId())){
+                    fileService.removeFile(recycledInfo.getFileId());
+                }else {
                     folderMapper.deleteByPrimaryKey(recycledInfo.getFileId());
+                    fileService.removeFolder(recycledInfo.getFileId());
                 }
             }
         }
@@ -103,8 +113,11 @@ public class RecycledService {
             recycledInfoMapper.deleteByPrimaryKey(recycledInfo.getId());
             //删除文件夹表和文件表记录
             //缺少删除实际文件方法
-            if (1 != fileInfoMapper.deleteByPrimaryKey(recycledInfo.getFileId())){
+            if (1 == fileInfoMapper.deleteByPrimaryKey(recycledInfo.getFileId())){
+                fileService.removeFile(recycledInfo.getFileId());
+            }else {
                 folderMapper.deleteByPrimaryKey(recycledInfo.getFileId());
+                fileService.removeFolder(recycledInfo.getFileId());
             }
 
             return true;
@@ -117,8 +130,8 @@ public class RecycledService {
      */
     public boolean restoreFile(Integer id){
 
-        if (1 != fileInfoMapper.updateByFileId(id)){
-            folderMapper.updateByFolderId(id);
+        if (1 != fileInfoMapper.editFileRecycledByFileId(id)){
+            folderMapper.editFolderRecycledById(id);
         }
         return 0 != recycledInfoMapper.deleteByFileId(id);
     }
