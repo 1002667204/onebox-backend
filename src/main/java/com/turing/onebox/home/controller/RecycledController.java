@@ -2,10 +2,12 @@ package com.turing.onebox.home.controller;
 
 import com.turing.onebox.common.model.result.FileItem;
 import com.turing.onebox.common.utils.AjaxJson;
+import com.turing.onebox.home.service.RecycledService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -19,13 +21,17 @@ import java.util.List;
 @RequestMapping("/api/recycled")
 public class RecycledController {
 
+    @Resource
+    private RecycledService recycledService;
+
     /**
      * 获取回收站文件列表 AjaxJson<List<FileItem>>
      * 每次获取时刷新回收站文件列表，删除过期文件
      */
     @PostMapping("/list")
     public AjaxJson<List<FileItem>> list(){
-        return null;
+
+        return AjaxJson.getSuccessData(recycledService.recycledList());
     }
 
     /**
@@ -34,7 +40,8 @@ public class RecycledController {
      */
     @PostMapping("/clear")
     public AjaxJson<?> clearRecycled(){
-        return null;
+        recycledService.clear();
+        return AjaxJson.getSuccess();
     }
 
     /**
@@ -43,7 +50,11 @@ public class RecycledController {
      */
     @PostMapping("/delete")
     public AjaxJson<?> completelyDeleteFile(Integer id){
-        return null;
+        if (recycledService.completelyDeleteFile(id)){
+            return AjaxJson.getSuccess();
+        }
+
+        return AjaxJson.getError();
     }
 
     /**
@@ -51,6 +62,9 @@ public class RecycledController {
      */
     @PostMapping("/restore")
     public AjaxJson<?> restoreFile(Integer id){
-        return null;
+        if (recycledService.restoreFile(id)){
+            return AjaxJson.getSuccess();
+        }
+        return AjaxJson.getError();
     }
 }

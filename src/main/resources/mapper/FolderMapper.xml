@@ -41,4 +41,9 @@
     select id, name, dir, secret, in_recycled, password, star
     from folder
   </select>
+  <update id="updateByFolderId" parameterType="java.lang.Integer">
+    update folder
+      set in_recycled =0
+    where id = #{id,jdbcType=INTEGER}
+  </update>
 </mapper>

@@ -119,4 +119,6 @@ public interface FileInfoMapper {
     int selectFileByFileNameAndDir(@Param("fileName") String fileName,@Param("dir") Integer dir);
 
     List<FileInfo> getFileInfoByDirId(Integer id);
+
+    int updateByFileId(Integer id);
 }
