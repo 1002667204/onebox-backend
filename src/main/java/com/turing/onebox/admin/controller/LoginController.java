@@ -63,7 +63,6 @@ public class LoginController {
         }
     }
 
-
     /**
      * 退出登录
      * @return AjaxJson.getSuccess()

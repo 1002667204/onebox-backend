@@ -1,6 +1,5 @@
 package com.turing.onebox.home.controller;
 
-import com.turing.onebox.common.model.dto.RecycledInfo;
 import com.turing.onebox.common.model.result.FileItem;
 import com.turing.onebox.common.utils.AjaxJson;
 import com.turing.onebox.home.service.RecycledService;
