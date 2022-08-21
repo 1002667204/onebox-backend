@@ -2,15 +2,15 @@ package com.turing.onebox.home.mapper;
 
 import com.turing.onebox.common.model.dto.FileInfo;
 import com.turing.onebox.common.model.dto.Folder;
+import com.turing.onebox.common.model.dto.StarredInfo;
 import com.turing.onebox.common.model.result.FileItem;
 import org.apache.ibatis.annotations.*;
-import org.apache.ibatis.annotations.Param;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Mapper
 public interface FileInfoMapper {
+
     int deleteByPrimaryKey(Integer id);
 
     int insert(FileInfo record);
@@ -24,44 +24,47 @@ public interface FileInfoMapper {
 
     /**
      * 获取文件列表
-     * @param name 文件夹名
+     * @param dir 当前文件夹
      * @return
      */
-    @ResultMap("fileInfoResultMap")
-    List<FileItem> fileList(String name);
+    List<FileInfo> fileList(Integer dir);
 
     /**
      * 获取星标文件列表
      * @return
      */
-    @ResultMap("fileInfoResultMap")
-    List<FileItem> starredList();
+    List<StarredInfo> starredList();
 
     /**
      * 新建文件夹
      * @param folder
      * @return
      */
-    @Insert("insert into folder values(#{id}, #{name}, #{dir}, #{secret}, 0, #{password}, 0")
-    boolean newFolder(Folder folder);
+    @Insert("insert into folder values(#{id}, #{name}, #{dir}, #{secret}, 0, #{password}, 0)")
+    Integer newFolder(Folder folder);
 
 
     /**
-     * 删除文件
+     * 标记文件为已删除
      * @param id
      * @return
      */
-    @Delete("delete from file where id=#{id}")
+    @Update("update file set recycled")
     boolean deleteFile(Integer id);
 
-
     /**
-     * 删除文件夹
+     * 标记文件夹为已删除
      * @param id
      * @return
      */
     @Delete("delete from folder where id=#{id}")
     boolean deleteFolder(Integer id);
+
+    /**
+     * 在回收站中创建记录
+     */
+    @Insert("insert into ")
+
 
     /**
      * 获取原先文件名，与重命名相关联
@@ -114,4 +117,6 @@ public interface FileInfoMapper {
      * @return
      */
     int selectFileByFileNameAndDir(@Param("fileName") String fileName,@Param("dir") Integer dir);
+
+    List<FileInfo> getFileInfoByDirId(Integer id);
 }

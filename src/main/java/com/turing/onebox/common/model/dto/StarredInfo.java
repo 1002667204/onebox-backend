@@ -16,7 +16,7 @@ public class StarredInfo {
 
     private String name;
 
-    private String dir;
+    private Integer dir;
 
     private String type;
 

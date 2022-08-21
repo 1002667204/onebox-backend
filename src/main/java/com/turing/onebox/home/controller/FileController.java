@@ -32,13 +32,10 @@ public class FileController {
      * @Return AjaxJson.getSuccessData(fileItemList)
      */
     @PostMapping("/files")
-    public AjaxJson<?> list(HttpServletRequest request) {
-        //获取需要查询的folder中name属性
-        String name = request.getParameter("name");
-
+    public AjaxJson<?> list(Integer id) {
         //没有name的话报错
-        if (name != null && !name.equals("")) {
-            List<FileItem> fileItemList = fileService.fileList(name);
+        if (id != null) {
+            List<FileItem> fileItemList = fileService.transIntoFileItem(fileService.fileList(id));
             return AjaxJson.getSuccessData(fileItemList);
         } else {
             return AjaxJson.getError("NullPointFolderName");

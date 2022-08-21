@@ -1,9 +1,11 @@
 package com.turing.onebox.home.service;
 
 import com.turing.onebox.common.model.dto.FileInfo;
+import com.turing.onebox.common.model.dto.StarredInfo;
 import com.turing.onebox.common.model.result.FileItem;
 import com.turing.onebox.common.model.dto.Folder;
 import com.turing.onebox.home.mapper.FileInfoMapper;
+import com.turing.onebox.home.mapper.StarredInfoMapper;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -14,8 +16,10 @@ import org.apache.ibatis.annotations.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -25,13 +29,16 @@ public class FileService {
     @Autowired
     private FileInfoMapper fileInfoMapper;
 
+    @Autowired
+    private StarredInfoMapper starredInfoMapper;
+
     /**
      * 获取文件列表
-     * @param name 文件夹名
+     * @param dir 当前文件夹
      * @return 
      */
-    public List<FileItem> fileList(String name) {
-        return fileInfoMapper.fileList(name);
+    public List<FileInfo> fileList(Integer dir) {
+        return fileInfoMapper.fileList(dir);
     }
 
     /**
@@ -39,17 +46,34 @@ public class FileService {
      * @return
      */
     public List<FileItem> starredList() {
-        //调用mapper方法
-        return fileInfoMapper.starredList();
+        List<StarredInfo> fileInfoList = starredInfoMapper.selectAll();
+        // 将文件列表转换为结果类
+        List<FileItem> fileItemList = new ArrayList<>();
+        for (StarredInfo fileInfo : fileInfoList){
+            fileItemList.add(new FileItem(fileInfo));
+        }
+        return fileItemList;
+    }
+
+    /**
+     * 将文件列表转换为结果类
+     */
+    public List<FileItem> transIntoFileItem(List<FileInfo> fileInfoList){
+        List<FileItem> fileItemList = new ArrayList<>();
+        for (FileInfo fileInfo : fileInfoList){
+            fileItemList.add(new FileItem(fileInfo));
+        }
+        return fileItemList;
     }
 
     /**
      * 新建文件夹
+     * TODO
      * @param folder
      * @return
      */
     public boolean newFolder(Folder folder) {
-        return fileInfoMapper.newFolder(folder);
+        return fileInfoMapper.newFolder(folder) == 1;
     }
 
 
@@ -63,12 +87,17 @@ public class FileService {
     }
 
     /**
-     * 删除文件(将文件从本地删除)
+     * 删除文件(将文件从本地删除，同时删除表中的记录)
+     * TODO
      */
+    public boolean removeFile(String path){
+        File file = new File(path);
+        return file.delete();
+    }
 
 
     /**
-     * 删除文件夹()
+     * 删除文件夹(删除后更新文件列表)
      * @param id
      * @return
      */
@@ -89,7 +118,6 @@ public class FileService {
         if (newName.equals(fileInfoMapper.getFileNameById(id))) {
             return false;
         }
-
         return fileInfoMapper.renameFile(id, newName);
     }
 

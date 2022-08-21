@@ -46,17 +46,9 @@
     from file
   </select>
 
-  <select id="fileList" resultType="com.turing.onebox.common.model.result.FileItem">
+  <select id="fileList" resultType="com.turing.onebox.common.model.dto.FileInfo">
     select *
-    from file where dir=(
-      select dir
-      from folder where `name`='test'
-    );
-  </select>
-  <select id="starredList" resultType="com.turing.onebox.common.model.result.FileItem">
-    select *
-    from file
-    where star=1;
+    from file where dir = #{dir,jdbcType=INTEGER} and in_recycled = 0
   </select>
 
 <!--FileInfo selectFileByFileNameAndDir(String fileName, Integer dir);-->
@@ -65,4 +57,13 @@
     from file
     where     name=#{fileName} and dir=#{dir}
   </select>
+
+  <select id="starredList" resultMap="BaseResultMap" >
+    select * from starred where in_recycled = 0
+  </select>
+
+  <select id="getFileInfoByDirId" resultType="com.turing.onebox.common.model.dto.FileInfo">
+    select * from file where dir = #{id}
+  </select>
+
 </mapper>

@@ -24,34 +24,26 @@ public class FileOperatorController {
      * @return AjaxJson<FileItem>
      */
     @PostMapping("/mkdir")
-    public AjaxJson<FileItem> mkdir(String name, Integer dir, Integer secret, String password) {
+    public AjaxJson<?> mkdir(String name, Integer dir, Integer secret, String password) {
 
         //先生成Folder对象
         Folder folder = new Folder();
 
-        int uuid = UUIDUtils.getUUID();//UUID这里用的强转，不知道行不行
+        int uuid = UUIDUtils.getUUID();
         folder.setId(uuid);
         folder.setName(name);
         folder.setDir(dir);
-        folder.setSecret(secret);//若是0则password为null，若是1则有password
-        folder.setInRecycled(0);//默认不在回收站
+        folder.setSecret(secret);
+        folder.setInRecycled(0);
         folder.setPassword(password);
-        folder.setStar(0);//默认不标星
+        folder.setStar(0);
 
-        //调用fileService方法
-        fileService.newFolder(folder);
+        if (fileService.newFolder(folder)) {
+            return AjaxJson.getSuccessData(new FileItem(folder));
+        } else {
+            return AjaxJson.getError("文件夹创建失败");
+        }
 
-        //fileItem结果
-        FileItem fileItem = new FileItem();
-
-        fileItem.setId(uuid);
-        fileItem.setName(name);
-        fileItem.setExt(null);//文件夹的扩展名不知道能不能这么写
-        fileItem.setSize(null);//这里不知道咋写
-        fileItem.setType("folder");
-        fileItem.setStar(0);
-
-        return AjaxJson.getSuccessData(fileItem);
     }
 
     /**
@@ -61,8 +53,11 @@ public class FileOperatorController {
      */
     @PostMapping("/delete/file")
     public AjaxJson<?> deleteFile(Integer id) {
-        //这里应该不用判断文件是否存在吧，如果不存在id没法传进来
-        return AjaxJson.getSuccessData(fileService.deleteFile(id));
+        if (fileService.deleteFile(id)) {
+            return AjaxJson.getSuccess("删除成功");
+        } else {
+            return AjaxJson.getError("删除失败，请检查文件是否存在");
+        }
     }
 
     /**
@@ -72,7 +67,11 @@ public class FileOperatorController {
      */
     @PostMapping("/delete/folder")
     public AjaxJson<?> deleteFolder(Integer id) {
-        return AjaxJson.getSuccessData(fileService.deleteFolder(id));
+        if (fileService.deleteFolder(id)){
+            return AjaxJson.getSuccess();
+        } else {
+            return AjaxJson.getError("删除失败");
+        }
     }
 
     /**
@@ -84,15 +83,20 @@ public class FileOperatorController {
     public AjaxJson<?> rename(Integer id, String newName) {
         //先判断newName是否为空
         if(newName == null || newName.equals("")){
-            return AjaxJson.getError("NullPointNewName");
+            return AjaxJson.getError("重命名失败，文件名不能为空");
         }
-        return AjaxJson.getSuccessData(fileService.renameFile(id, newName));
+
+        if (fileService.renameFile(id, newName)){
+            return AjaxJson.getSuccess();
+        } else {
+            return AjaxJson.getError("重命名失败");
+        }
+
     }
 
 
     /**
      * 重命名文件夹
-     * 重命名文件夹后是不是要修改该文件夹下所有文件的dir
      * @param
      * @return AjaxJson.getSuccess()
      */
