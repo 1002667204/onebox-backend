@@ -1,11 +1,12 @@
 package com.turing.onebox.home.mapper;
 
 import com.turing.onebox.common.model.dto.LogInfo;
+import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
+@Mapper
 public interface LogInfoMapper {
     int deleteByPrimaryKey(Integer id);
 

@@ -45,4 +45,18 @@
     select id, name, dir, type, ext, size, real_path, in_recycled, star
     from file
   </select>
+
+  <select id="fileList" resultType="com.turing.onebox.common.model.result.FileItem">
+    select *
+    from file where dir=(
+      select dir
+      from folder where `name`='test'
+    );
+  </select>
+  <select id="starredList" resultType="com.turing.onebox.common.model.result.FileItem">
+    select *
+    from file
+    where star=1;
+  </select>
+
 </mapper>

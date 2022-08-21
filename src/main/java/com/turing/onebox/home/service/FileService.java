@@ -2,8 +2,15 @@ package com.turing.onebox.home.service;
 
 import com.turing.onebox.common.model.result.FileItem;
 import com.turing.onebox.common.model.dto.Folder;
+import com.turing.onebox.home.mapper.FileInfoMapper;
+import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
@@ -11,13 +18,25 @@ import java.util.List;
 @Service
 public class FileService {
 
+    @Autowired
+    private FileInfoMapper fileInfoMapper;
+
     /**
      * 获取文件列表
      * @param name 文件夹名
      * @return 
      */
     public List<FileItem> fileList(String name) {
-        return null;
+        return fileInfoMapper.fileList(name);
+    }
+
+    /**
+     * 获取星标文件列表
+     * @return
+     */
+    public List<FileItem> starredList() {
+        //调用mapper方法
+        return fileInfoMapper.starredList();
     }
 
     /**
@@ -26,27 +45,31 @@ public class FileService {
      * @return
      */
     public boolean newFolder(Folder folder) {
-        return false;
+        return fileInfoMapper.newFolder(folder);
     }
 
 
     /**
-     * 删除文件
+     * 删除文件(将文件移入回收站)
      * @param id
      * @return
      */
     public boolean deleteFile(Integer id) {
-        return false;
+        return fileInfoMapper.deleteFile(id);
     }
+
+    /**
+     * 删除文件(将文件从本地删除)
+     */
 
 
     /**
-     * 删除文件夹
+     * 删除文件夹()
      * @param id
      * @return
      */
     public boolean deleteFolder(Integer id) {
-        return false;
+        return fileInfoMapper.deleteFolder(id);
     }
 
 
@@ -58,9 +81,13 @@ public class FileService {
      * @return
      */
     public boolean renameFile(Integer id, String newName) {
-        return false;
-    }
+        //先判断 文件名 是否改变
+        if (newName.equals(fileInfoMapper.getFileNameById(id))) {
+            return false;
+        }
 
+        return fileInfoMapper.renameFile(id, newName);
+    }
 
     /**
      * 重命名文件夹
@@ -68,26 +95,13 @@ public class FileService {
      * @return
      */
     public boolean renameFolder(Integer id, String newName) {
-        return false;
+        //先判断 文件名 是否改变
+        if (newName.equals(fileInfoMapper.getFolderNameById(id))) {
+            return false;
+        }
+        return fileInfoMapper.renameFolder(id, newName);
     }
 
-
-    /**
-     * 上传文件
-     * @param path
-     * @param inputStream
-     */
-    public void uploadFile(String path, InputStream inputStream) {
-        return;
-    }
-
-
-    /**
-     * 下载文件
-     * @param pathAndName
-     */
-    public void downloadToStream(String pathAndName) {
-    }
 
     /**
      * 设置星标文件
@@ -95,6 +109,7 @@ public class FileService {
      * @return
      */
     public boolean starredFile(Integer id){
-        return false;
+        return fileInfoMapper.starredFile(id);
     }
+
 }
