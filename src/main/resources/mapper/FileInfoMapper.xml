@@ -59,4 +59,10 @@
     where star=1;
   </select>
 
+<!--FileInfo selectFileByFileNameAndDir(String fileName, Integer dir);-->
+  <select id="selectFileByFileNameAndDir"  resultType="integer">
+    select COUNT(*)
+    from file
+    where     name=#{fileName} and dir=#{dir}
+  </select>
 </mapper>

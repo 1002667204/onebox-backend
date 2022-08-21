@@ -1,4 +1,6 @@
 spring:
+#  profiles:
+
   #  配置数据源信息
   datasource:
     # 配置连接数据库的信息
@@ -25,3 +27,8 @@ mybatis:
   configuration:
     #开启驼峰命名法
     map-underscore-to-camel-case: true
+
+huang:
+  file:
+    upload:
+      path: E:\cahe\ #上传的文件存储路径

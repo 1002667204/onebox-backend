@@ -4,6 +4,7 @@ import com.turing.onebox.common.model.dto.FileInfo;
 import com.turing.onebox.common.model.dto.Folder;
 import com.turing.onebox.common.model.result.FileItem;
 import org.apache.ibatis.annotations.*;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -105,4 +106,12 @@ public interface FileInfoMapper {
     @ResultMap("starredResultMap")
     boolean starredFile(Integer id);
 
+
+    /**
+     * @Author HuangYuhan
+     * @param fileName
+     * @param dir
+     * @return
+     */
+    int selectFileByFileNameAndDir(@Param("fileName") String fileName,@Param("dir") Integer dir);
 }

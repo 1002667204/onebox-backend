@@ -22,4 +22,7 @@ public interface ClassInfoMapper {
     Integer updateClassInfo(ClassInfo classInfo);
 
     Integer clearClassInfo();
+
+    /*根据后缀名查询其类型名*/
+    String selectClassNameByExt(String ext);
 }

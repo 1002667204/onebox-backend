@@ -38,13 +38,13 @@ class OneboxApplicationTests {
     @Test
     void testUpdateClassInfo(){
         classInfoMapper.clearClassInfo();
-        classInfoMapper.updateClassInfo(new ClassInfo(UUIDUtils.getUUID(), "pic", "jpeg"));
-        classInfoMapper.updateClassInfo(new ClassInfo(UUIDUtils.getUUID(), "pic", "jpg"));
-        classInfoMapper.updateClassInfo(new ClassInfo(UUIDUtils.getUUID(), "audio", "mp3"));
-        classInfoMapper.updateClassInfo(new ClassInfo(UUIDUtils.getUUID(), "audio", "flac"));
-        classInfoMapper.updateClassInfo(new ClassInfo(UUIDUtils.getUUID(), "audio", "wav"));
-        classInfoMapper.updateClassInfo(new ClassInfo(UUIDUtils.getUUID(), "video", "mp4"));
-        classInfoMapper.updateClassInfo(new ClassInfo(UUIDUtils.getUUID(), "video", "mkv"));
+        classInfoMapper.updateClassInfo(new ClassInfo(UUIDUtils.getUUID(), "pic", ".jpeg"));
+        classInfoMapper.updateClassInfo(new ClassInfo(UUIDUtils.getUUID(), "pic", ".jpg"));
+        classInfoMapper.updateClassInfo(new ClassInfo(UUIDUtils.getUUID(), "audio", ".mp3"));
+        classInfoMapper.updateClassInfo(new ClassInfo(UUIDUtils.getUUID(), "audio", ".flac"));
+        classInfoMapper.updateClassInfo(new ClassInfo(UUIDUtils.getUUID(), "audio", ".wav"));
+        classInfoMapper.updateClassInfo(new ClassInfo(UUIDUtils.getUUID(), "video", ".mp4"));
+        classInfoMapper.updateClassInfo(new ClassInfo(UUIDUtils.getUUID(), "video", ".mkv"));
     }
 
     @Test

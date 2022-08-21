@@ -1,5 +1,6 @@
 package com.turing.onebox.common.constant;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
 /**
@@ -33,6 +34,8 @@ public class OneboxConstant {
      * 最大支持文本文件大小为 ? KB 的文件内容.
      */
     public static Long TEXT_MAX_FILE_SIZE_KB = 100L;
+
+
 
 
 //    @Autowired(required = false)

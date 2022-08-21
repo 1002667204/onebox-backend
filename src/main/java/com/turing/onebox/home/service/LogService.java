@@ -1,7 +1,11 @@
 package com.turing.onebox.home.service;
 
 import com.turing.onebox.common.model.dto.LogInfo;
+import com.turing.onebox.home.mapper.LogInfoMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.logging.LogManager;
 
 /**
  * @ClassName LogService
@@ -13,11 +17,19 @@ import org.springframework.stereotype.Service;
 @Service
 public class LogService {
 
+    @Autowired
+    private LogInfoMapper logInfoMapper;
     /**
      * 添加一条修改记录
      */
     public boolean addLogInfo(LogInfo logInfo){
-        return false;
+        int total = logInfoMapper.insert(logInfo);
+        if (total == 1) {
+            return true;
+        }else {
+            return false;
+        }
+
     }
 
 

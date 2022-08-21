@@ -15,6 +15,8 @@ import java.io.InputStream;
 public class UploadService {
 
     public void uploadFile(String path, InputStream inputStream) {
+        
+
         // 将虚拟路径转化为真实路径
 //        String baseFilePath = "/root" + "";
 //        String uploadPath = StringUtils.removeDuplicateSlashes(baseFilePath + StringUtils.DELIMITER_STR + path);

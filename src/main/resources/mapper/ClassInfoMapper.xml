@@ -44,4 +44,10 @@
     select * from config_class
   </select>
 
+  <!--String selectClassNameBySuffixName(String suffixName);-->
+  <select id="selectClassNameByExt" resultType="java.lang.String">
+    select class_name
+    from config_class
+    where ext=#{suffixName}
+  </select>
 </mapper>
