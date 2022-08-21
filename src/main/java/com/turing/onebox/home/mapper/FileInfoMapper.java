@@ -2,8 +2,10 @@ package com.turing.onebox.home.mapper;
 
 import com.turing.onebox.common.model.dto.FileInfo;
 import com.turing.onebox.common.model.dto.Folder;
+import com.turing.onebox.common.model.dto.RecycledInfo;
 import com.turing.onebox.common.model.dto.StarredInfo;
 import com.turing.onebox.common.model.result.FileItem;
+import lombok.Data;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -27,7 +29,7 @@ public interface FileInfoMapper {
      * @param dir 当前文件夹
      * @return
      */
-    List<FileInfo> fileList(Integer dir);
+    List<FileInfo> seleteFileByDir(Integer dir);
 
     /**
      * 获取星标文件列表
@@ -49,22 +51,28 @@ public interface FileInfoMapper {
      * @param id
      * @return
      */
-    @Update("update file set recycled")
-    boolean deleteFile(Integer id);
+    @Update("update file set in_recycled = 1")
+    Integer deleteFile(Integer id);
 
     /**
      * 标记文件夹为已删除
      * @param id
      * @return
      */
-    @Delete("delete from folder where id=#{id}")
+    @Update("update folder set in_recycled = 1")
     boolean deleteFolder(Integer id);
 
     /**
      * 在回收站中创建记录
      */
-    @Insert("insert into ")
+    @Insert("insert into recycled values(#{id}, #{delete_time}, #{destory_time}, #{file_id})")
+    Integer newRecycledInfo(RecycledInfo recycledInfo);
 
+    /**
+     * 根据文件夹id删除文件
+     */
+    @Delete("delete from file where dir = #{dir}")
+    Integer deleteFileByDirId(Integer dir);
 
     /**
      * 获取原先文件名，与重命名相关联
@@ -82,7 +90,7 @@ public interface FileInfoMapper {
      * @return
      */
     @Update("update file set name=#{newName} where id=#{id}")
-    boolean renameFile(Integer id, String newName);
+    Integer renameFile(Integer id, String newName);
 
     /**
      * 获取原先 文件夹 名，与重命名相关联
@@ -98,17 +106,21 @@ public interface FileInfoMapper {
      * @return
      */
     @Update("update folder set name=#{newName} where id=#{id}")
-    boolean renameFolder(Integer id, String newName);
+    Integer renameFolder(Integer id, String newName);
+
+    /**
+     * 根据文件夹名查找文件夹
+     */
+    @Select("select * from folder where name = #{name} and dir = #{dir};")
+    Integer selectFolderByNameAndDir (Folder folder);
 
     /**
      * 设置星标文件
-     * @param id
+     * @param fileInfo
      * @return
      */
-    @Insert("insert into starred values(#{id}, #{name}, #{dir}, #{type}, #{ext}, #{size}, #{real_Path}, 0, 1)")
-    @ResultMap("starredResultMap")
-    boolean starredFile(Integer id);
-
+    @Insert("insert into starred values(#{id}, #{name}, #{dir}, #{type}, #{ext}, #{size}, #{real_Path}, #{inRecycled}, #{star})")
+    Integer starredFile(FileInfo fileInfo);
 
     /**
      * @Author HuangYuhan

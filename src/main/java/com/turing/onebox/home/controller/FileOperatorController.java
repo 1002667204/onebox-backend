@@ -116,7 +116,13 @@ public class FileOperatorController {
      */
     @PostMapping("/starred")
     public AjaxJson<?> starredFile(Integer id, Integer starred){
-        return AjaxJson.getSuccessData(fileService.starredFile(id));
+        if (fileService.starredFile(id, starred)){
+            if (starred == 0) return AjaxJson.getSuccess("取消星标成功");
+            if (starred == 1) return AjaxJson.getSuccess("设置星标成功");
+            return AjaxJson.getError("非法星标状态");
+        } else {
+            return AjaxJson.getError("设置星标状态失败");
+        }
     }
 
 }

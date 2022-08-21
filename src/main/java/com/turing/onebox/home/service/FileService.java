@@ -15,6 +15,7 @@ import com.turing.onebox.home.mapper.FileInfoMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
 import java.io.IOException;
@@ -38,7 +39,7 @@ public class FileService {
      * @return 
      */
     public List<FileInfo> fileList(Integer dir) {
-        return fileInfoMapper.fileList(dir);
+        return fileInfoMapper.seleteFileByDir(dir);
     }
 
     /**
@@ -73,6 +74,11 @@ public class FileService {
      * @return
      */
     public boolean newFolder(Folder folder) {
+        // 判断当前目录下是否有同名文件夹
+        if (fileInfoMapper.selectFolderByNameAndDir(folder) != 0){
+            return false;
+        }
+        // 新增文件夹
         return fileInfoMapper.newFolder(folder) == 1;
     }
 
@@ -83,14 +89,28 @@ public class FileService {
      * @return
      */
     public boolean deleteFile(Integer id) {
-        return fileInfoMapper.deleteFile(id);
+        // 设置文件的in_recycled字段为1
+        if (fileInfoMapper.deleteFile(id) == 0) return false;
+        // 在回收站中增加记录
+        Date deleteTime = new Date();
+        RecycledInfo recycledInfo = new RecycledInfo(UUIDUtils.getUUID(), DateUtils.formateDateTime(deleteTime), DateUtils.future30Days(new Date()), id);
+        return fileInfoMapper.newRecycledInfo(recycledInfo) == 1;
     }
 
     /**
      * 删除文件(将文件从本地删除，同时删除表中的记录)
-     * TODO
+     *
      */
-    public boolean removeFile(String path){
+    public boolean removeFile(Integer id){
+        // 获取文件表中的记录并删除
+        FileInfo fileInfo = fileInfoMapper.selectByPrimaryKey(id);
+        if (fileInfo == null) return false;
+        String path = fileInfo.getRealPath();
+        // 删除文件表中的记录
+        if (fileInfoMapper.deleteByPrimaryKey(id) == 0) return false;
+        // 删除回收站中的记录
+        if (recycledInfoMapper.deleteByFileId(id) == 0) return false;
+        // 删除本地文件
         File file = new File(path);
         return file.delete();
     }
@@ -118,7 +138,7 @@ public class FileService {
         if (newName.equals(fileInfoMapper.getFileNameById(id))) {
             return false;
         }
-        return fileInfoMapper.renameFile(id, newName);
+        return fileInfoMapper.renameFile(id, newName) == 1;
     }
 
     /**
@@ -131,7 +151,7 @@ public class FileService {
         if (newName.equals(fileInfoMapper.getFolderNameById(id))) {
             return false;
         }
-        return fileInfoMapper.renameFolder(id, newName);
+        return fileInfoMapper.renameFolder(id, newName) == 1;
     }
 
 
@@ -165,13 +185,22 @@ public class FileService {
      * @param id
      * @return
      */
-    public boolean starredFile(Integer id){
-        return fileInfoMapper.starredFile(id);
+    public boolean starredFile(Integer id, Integer starred){
+
+        // 获取文件当前星标状态
+        FileInfo fileInfo = fileInfoMapper.selectByPrimaryKey(id);
+        if (Objects.equals(fileInfo.getStar(), starred)) return false;
+        // 修改文件星标字段
+        if (fileInfoMapper.updateByPrimaryKey(fileInfo) == 0) return false;
+        // 在starred表中添加记录
+        fileInfo.setStar(starred);
+        return fileInfoMapper.starredFile(fileInfo) == 1;
     }
 
 
 
-    /**根据文件的名字和所属父类文件查询是否重命名
+    /**
+     * 根据文件的名字和所属父类文件查询是否重命名
      * @Author HuangYuhan
      * @param fileName
      * @param dir

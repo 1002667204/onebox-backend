@@ -46,7 +46,7 @@
     from file
   </select>
 
-  <select id="fileList" resultType="com.turing.onebox.common.model.dto.FileInfo">
+  <select id="seleteFileByDir" resultType="com.turing.onebox.common.model.dto.FileInfo">
     select *
     from file where dir = #{dir,jdbcType=INTEGER} and in_recycled = 0
   </select>

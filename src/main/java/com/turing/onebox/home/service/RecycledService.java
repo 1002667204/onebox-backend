@@ -48,9 +48,10 @@ public class RecycledService {
                 RecycledInfo recycledInfo = iter.next();
                 //判断日期是否过期
                 if ((DateUtils.formateDateTime(new Date()).compareTo(recycledInfo.getDestroyTime()))>=0){
+                    Integer id = recycledInfo.getId();
                     //删除回收站记录
-                    recycledInfoMapper.deleteByPrimaryKey(recycledInfo.getId());
-                    //删除文件夹表和文件表记录
+                    recycledInfoMapper.deleteByPrimaryKey(id);
+                    //删除文件夹表和文件表记
                     //缺少删除实际文件方法
                     if (1 != fileInfoMapper.deleteByPrimaryKey(recycledInfo.getFileId())){
                         folderMapper.deleteByPrimaryKey(recycledInfo.getFileId());
