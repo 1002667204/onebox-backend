@@ -15,9 +15,8 @@ public class UserService {
     @Autowired
     private UserMapper userMapper;
 
-    public boolean queryUserByUsernameAndPwd(String username,String password){
-        User user = userMapper.selectUserByUsernameAndPwd(username, password);
-        return user != null;
+    public User queryUserByUsernameAndPwd(String username,String password){
+        return userMapper.selectUserByUsernameAndPwd(username, password);
     }
 
 

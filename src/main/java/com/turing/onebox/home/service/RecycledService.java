@@ -1,6 +1,20 @@
 package com.turing.onebox.home.service;
 
+import com.turing.onebox.common.model.dto.FileInfo;
+import com.turing.onebox.common.model.dto.Folder;
+import com.turing.onebox.common.model.dto.RecycledInfo;
+import com.turing.onebox.common.model.result.FileItem;
+import com.turing.onebox.common.utils.DateUtils;
+import com.turing.onebox.home.mapper.FileInfoMapper;
+import com.turing.onebox.home.mapper.FolderMapper;
+import com.turing.onebox.home.mapper.RecycledInfoMapper;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * @ClassName RecycledService
@@ -12,24 +26,88 @@ import org.springframework.stereotype.Service;
 @Service
 public class RecycledService {
 
+    @Resource
+    private RecycledInfoMapper recycledInfoMapper;
+
+    @Resource
+    private FileInfoMapper fileInfoMapper;
+    @Resource
+    private FolderMapper folderMapper;
     /**
      * 获取回收站文件列表
      */
-    public boolean recycledList(){
-        return false;
+    public List<FileItem> recycledList(){
+        List<RecycledInfo> recycledInfos;
+        recycledInfos = recycledInfoMapper.selectAll();
+        if (recycledInfos.isEmpty()){
+            return null;
+        }else {
+            Iterator<RecycledInfo> iter = recycledInfos.iterator();
+            List<FileItem> fileItems = new ArrayList<>();
+            while (iter.hasNext()){
+                RecycledInfo recycledInfo = iter.next();
+                //判断日期是否过期
+                if ((DateUtils.formateDateTime(new Date()).compareTo(recycledInfo.getDestroyTime()))>=0){
+                    //删除回收站记录
+                    recycledInfoMapper.deleteByPrimaryKey(recycledInfo.getId());
+                    //删除文件夹表和文件表记录
+                    //缺少删除实际文件方法
+                    if (1 != fileInfoMapper.deleteByPrimaryKey(recycledInfo.getFileId())){
+                        folderMapper.deleteByPrimaryKey(recycledInfo.getFileId());
+                    }
+                    //删除返回值记录
+                    iter.remove();
+                }else {
+                    FileInfo fileInfo = fileInfoMapper.selectByPrimaryKey(recycledInfo.getFileId());
+                    if (fileInfo != null){
+                        fileItems.add(new FileItem(fileInfo));
+                    }else {
+                        Folder folder = folderMapper.selectByPrimaryKey(recycledInfo.getFileId());
+                        fileItems.add(new FileItem(folder));
+                    }
+                }
+
+            }
+            return fileItems;
+        }
     }
 
     /**
      * 清空回收站
      */
-    public boolean clear(){
-        return false;
+    public void clear(){
+        List<RecycledInfo> recycledInfos;
+        recycledInfos = recycledInfoMapper.selectAll();
+        if (!recycledInfos.isEmpty()){
+            for (RecycledInfo recycledInfo:recycledInfos){
+                //删除回收站记录
+                recycledInfoMapper.deleteByPrimaryKey(recycledInfo.getId());
+                //删除文件夹表和文件表记录
+                //缺少删除实际文件方法
+                if (1 != fileInfoMapper.deleteByPrimaryKey(recycledInfo.getFileId())){
+                    folderMapper.deleteByPrimaryKey(recycledInfo.getFileId());
+                }
+            }
+        }
     }
 
     /**
      * 删除回收站中的某一个文件
      */
     public boolean completelyDeleteFile(Integer id){
+        RecycledInfo recycledInfo = recycledInfoMapper.selectByFileId(id);
+
+        if (recycledInfo != null){
+            //删除回收站记录
+            recycledInfoMapper.deleteByPrimaryKey(recycledInfo.getId());
+            //删除文件夹表和文件表记录
+            //缺少删除实际文件方法
+            if (1 != fileInfoMapper.deleteByPrimaryKey(recycledInfo.getFileId())){
+                folderMapper.deleteByPrimaryKey(recycledInfo.getFileId());
+            }
+
+            return true;
+        }
         return false;
     }
 
@@ -37,7 +115,11 @@ public class RecycledService {
      * 还原文件
      */
     public boolean restoreFile(Integer id){
-        return false;
+
+        if (1 != fileInfoMapper.updateByFileId(id)){
+            folderMapper.updateByFolderId(id);
+        }
+        return 0 != recycledInfoMapper.deleteByFileId(id);
     }
 
 }

@@ -45,4 +45,9 @@
     select id, name, dir, type, ext, size, real_path, in_recycled, star
     from file
   </select>
+  <update id="updateByFileId" parameterType="java.lang.Integer" >
+    update file
+      set in_recycled = 0
+    where id=#{id,jdbcType=INTEGER}
+  </update>
 </mapper>

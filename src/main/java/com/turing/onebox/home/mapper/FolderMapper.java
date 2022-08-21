@@ -16,4 +16,6 @@ public interface FolderMapper {
     List<Folder> selectAll();
 
     int updateByPrimaryKey(Folder record);
+
+    int updateByFolderId(Integer id);
 }

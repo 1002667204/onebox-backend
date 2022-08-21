@@ -11,6 +11,15 @@
     delete from recycled
     where id = #{id,jdbcType=INTEGER}
   </delete>
+  <delete id="deleteByFileId" parameterType="java.lang.Integer">
+    delete from recycled
+    where file_id = #{id,jdbcType=INTEGER}
+  </delete>
+  <select id="selectByFileId" resultMap="BaseResultMap">
+    select id, delete_time, destroy_time, file_id
+    from recycled
+    where file_id = #{id,jdbcType=INTEGER}
+  </select>
   <insert id="insert" parameterType="com.turing.onebox.common.model.dto.RecycledInfo" >
     insert into recycled (id, delete_time, destroy_time, 
       file_id)

@@ -25,6 +25,7 @@ public class FileItem {
     public FileItem(){}
 
     public FileItem(FileInfo fileInfo){
+        this.id = fileInfo.getId();
         this.name = fileInfo.getName();
         this.ext = fileInfo.getExt();
         this.size = fileInfo.getSize();
@@ -33,6 +34,7 @@ public class FileItem {
     }
 
     public FileItem(Folder folder){
+        this.id = folder.getId();
         this.name = folder.getName();
         this.ext = null;
         this.size = null;

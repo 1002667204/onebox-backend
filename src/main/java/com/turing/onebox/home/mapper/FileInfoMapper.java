@@ -16,4 +16,6 @@ public interface FileInfoMapper {
     List<FileInfo> selectAll();
 
     int updateByPrimaryKey(FileInfo record);
+
+    int updateByFileId(Integer id);
 }
