@@ -12,6 +12,7 @@ import com.turing.onebox.home.service.LogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -34,6 +35,7 @@ import java.util.Date;
  * @Version 1.0
  */
 @Controller
+@CrossOrigin
 public class UploadController {
     /*
      * 文件上传路径
@@ -72,6 +74,7 @@ public class UploadController {
     @PostMapping("/file/upload/**")
     @ResponseBody
     public AjaxJson<?> upload(@RequestParam MultipartFile file, Integer dir) throws IOException {
+        System.out.println(dir);
         // 判断上传的文件是否为空
         if (file == null || file.isEmpty()) {
             return AjaxJson.getError("文件为空，无法上传.");

@@ -3,6 +3,7 @@ package com.turing.onebox.home.controller;
 import com.turing.onebox.home.service.DownloadService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -17,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
  * @Version 1.0
  */
 @Controller
+@CrossOrigin
 public class DownloadController {
 
     @Resource

@@ -3,6 +3,7 @@ package com.turing.onebox.home.controller;
 import com.turing.onebox.common.model.dto.FileInfo;
 import com.turing.onebox.common.model.dto.Folder;
 import com.turing.onebox.common.utils.AjaxJson;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/")
+@CrossOrigin
 public class ShareController {
 
     /**

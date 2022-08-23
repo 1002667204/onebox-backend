@@ -42,6 +42,7 @@ public class RecycledService {
     public List<FileItem> recycledList(){
         List<RecycledInfo> recycledInfos;
         recycledInfos = recycledInfoMapper.selectAll();
+        System.out.println(recycledInfos);
         if (recycledInfos.isEmpty()){
             return null;
         }else {
@@ -71,6 +72,7 @@ public class RecycledService {
                         fileItems.add(new FileItem(fileInfo));
                     }else {
                         Folder folder = folderMapper.selectByPrimaryKey(recycledInfo.getFileId());
+                        System.out.println(folder);
                         fileItems.add(new FileItem(folder));
                     }
                 }

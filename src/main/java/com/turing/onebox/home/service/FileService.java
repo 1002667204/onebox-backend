@@ -6,23 +6,19 @@ import com.turing.onebox.common.model.dto.StarredInfo;
 import com.turing.onebox.common.model.result.FileItem;
 import com.turing.onebox.common.model.dto.Folder;
 import com.turing.onebox.common.utils.DateUtils;
+import com.turing.onebox.common.utils.TransUtils;
 import com.turing.onebox.common.utils.UUIDUtils;
 import com.turing.onebox.home.mapper.*;
-import org.apache.ibatis.io.Resources;
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import com.turing.onebox.home.mapper.FileInfoMapper;
-import org.apache.ibatis.annotations.Mapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import javax.xml.crypto.Data;
+import org.springframework.stereotype.Service;
+
+
+
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -44,13 +40,39 @@ public class FileService {
     @Autowired
     private RecycledInfoMapper recycledInfoMapper;
 
+
     /**
-     * 获取文件列表
-     * @param dir 当前文件夹
-     * @return 
+     * 获取指定Dir下所有的文件和文件夹
+     *
      */
-    public List<FileInfo> fileList(Integer dir) {
-        return fileInfoMapper.seleteFileByDir(dir);
+    public List<FileItem> queryFileItemByDir(Integer dir){
+        List<FileInfo> fileInfos = fileInfoMapper.selectFileByDir(dir);
+        List<Folder> folders = folderMapper.selectFolderByDir(dir);
+
+        if (fileInfos == null && folders == null){
+            return null;
+        }
+        List<FileItem> fileItems = new ArrayList<>();
+        if (folders != null){
+            for (Folder folder:folders){
+                fileItems.add(new FileItem(folder));
+            }
+        }
+        if (fileInfos != null){
+            for (FileInfo fileInfo:fileInfos){
+                fileItems.add(new FileItem(fileInfo));
+            }
+        }
+        return fileItems;
+
+    }
+    /**
+     *
+     */
+    public List<FileItem> queryFileByType(String type){
+
+        List<FileInfo> fileInfos = fileInfoMapper.selectFileByType(type);
+        return TransUtils.fileInfoTransToFileItem(fileInfos);
     }
 
     /**
@@ -62,17 +84,6 @@ public class FileService {
         // 将文件列表转换为结果类
         List<FileItem> fileItemList = new ArrayList<>();
         for (StarredInfo fileInfo : fileInfoList){
-            fileItemList.add(new FileItem(fileInfo));
-        }
-        return fileItemList;
-    }
-
-    /**
-     * 将文件列表转换为结果类
-     */
-    public List<FileItem> transIntoFileItem(List<FileInfo> fileInfoList){
-        List<FileItem> fileItemList = new ArrayList<>();
-        for (FileInfo fileInfo : fileInfoList){
             fileItemList.add(new FileItem(fileInfo));
         }
         return fileItemList;
@@ -152,7 +163,7 @@ public class FileService {
         if (folderMapper.deleteByPrimaryKey(id) == 0) return false;
         // 彻底删除文件夹内的文件
         int count = 0;
-        for (FileInfo fileInfo : fileInfoMapper.seleteFileByDir(id)) {
+        for (FileInfo fileInfo : fileInfoMapper.selectFileByDir(id)) {
             if (removeFile(fileInfo.getId())) count++;
         }
         return (count > 0);

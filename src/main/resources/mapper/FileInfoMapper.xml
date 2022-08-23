@@ -9,6 +9,7 @@
     <result column="ext" property="ext" jdbcType="VARCHAR" />
     <result column="size" property="size" jdbcType="INTEGER" />
     <result column="real_path" property="realPath" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
     <result column="in_recycled" property="inRecycled" jdbcType="INTEGER" />
     <result column="star" property="star" jdbcType="INTEGER" />
   </resultMap>
@@ -19,10 +20,10 @@
   <insert id="insert" parameterType="com.turing.onebox.common.model.dto.FileInfo" >
     insert into file (id, name, dir, 
       type, ext, size, real_path, 
-      in_recycled, star)
+      in_recycled, star,create_time)
     values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{dir,jdbcType=INTEGER}, 
       #{type,jdbcType=VARCHAR}, #{ext,jdbcType=VARCHAR}, #{size,jdbcType=INTEGER}, #{realPath,jdbcType=VARCHAR}, 
-      #{inRecycled,jdbcType=INTEGER}, #{star,jdbcType=INTEGER})
+      #{inRecycled,jdbcType=INTEGER}, #{star,jdbcType=INTEGER}, #{createTime,jdbcType=VARCHAR})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.turing.onebox.common.model.dto.FileInfo" >
     update file
@@ -30,6 +31,7 @@
       dir = #{dir,jdbcType=INTEGER},
       type = #{type,jdbcType=VARCHAR},
       ext = #{ext,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=VARCHAR},
       size = #{size,jdbcType=INTEGER},
       real_path = #{realPath,jdbcType=VARCHAR},
       in_recycled = #{inRecycled,jdbcType=INTEGER},
@@ -37,16 +39,16 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select id, name, dir, type, ext, size, real_path, in_recycled, star
+    select id, name, dir, type, ext, size, real_path, in_recycled, star, create_time
     from file
     where id = #{id,jdbcType=INTEGER}
   </select>
   <select id="selectAll" resultMap="BaseResultMap" >
-    select id, name, dir, type, ext, size, real_path, in_recycled, star
+    select id, name, dir, type, ext, size, real_path, in_recycled, star, create_time
     from file
   </select>
 
-  <select id="seleteFileByDir" resultType="com.turing.onebox.common.model.dto.FileInfo">
+  <select id="selectFileByDir" resultType="com.turing.onebox.common.model.dto.FileInfo">
     select *
     from file where dir = #{dir,jdbcType=INTEGER} and in_recycled = 0
   </select>
@@ -64,6 +66,9 @@
 
   <select id="getFileInfoByDirId" resultType="com.turing.onebox.common.model.dto.FileInfo">
     select * from file where dir = #{id}
+  </select>
+  <select id="selectFileByType" resultType="com.turing.onebox.common.model.dto.FileInfo">
+    select * from file where type = #{type,jdbcType=VARCHAR}
   </select>
 
   <update id="editFileRecycledByFileId" parameterType="java.lang.Integer" >

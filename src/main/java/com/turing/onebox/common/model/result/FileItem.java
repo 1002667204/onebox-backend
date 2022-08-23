@@ -23,6 +23,8 @@ public class FileItem {
 
     private Integer star;
 
+    private String createTime;
+
     public FileItem(){}
 
     public FileItem(FileInfo fileInfo){
@@ -32,6 +34,7 @@ public class FileItem {
         this.size = fileInfo.getSize();
         this.type = fileInfo.getType();
         this.star = fileInfo.getStar();
+        this.createTime = fileInfo.getCreateTime();
     }
 
     public FileItem(Folder folder){
@@ -39,6 +42,7 @@ public class FileItem {
         this.name = folder.getName();
         this.ext = null;
         this.size = null;
+        this.createTime = folder.getCreateTime();
         if (folder.getSecret() == 0){
             this.type = "folder";
         } else {

@@ -17,6 +17,25 @@ public class OneboxConstant {
 
     public static final String PATH_SEPARATOR = "/";
 
+    /**
+     * 是否是标星文件
+     */
+    public static final Integer IS_STARRED =1;
+    public static final Integer IS_NOT_STARRED =0;
+
+    /**
+     * 文件是否在回收站
+     */
+    public static final Integer IN_RECYCLED = 1;
+    public static final Integer NOT_IN_RECYCLED = 0;
+
+    /**
+     * 是否是秘密文件夹
+     */
+    public static final Integer IS_SECRET = 1;
+    public static final Integer IS_NOT_SECRET = 0;
+
+
 
     /**
      * 系统产生的临时文件路径
@@ -34,6 +53,8 @@ public class OneboxConstant {
      * 最大支持文本文件大小为 ? KB 的文件内容.
      */
     public static Long TEXT_MAX_FILE_SIZE_KB = 100L;
+
+
 
 
 

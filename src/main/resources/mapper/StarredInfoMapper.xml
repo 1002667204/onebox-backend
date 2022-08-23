@@ -10,6 +10,7 @@
     <result column="size" property="size" jdbcType="INTEGER" />
     <result column="real_path" property="realPath" jdbcType="VARCHAR" />
     <result column="in_recycled" property="inRecycled" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from starred
@@ -18,10 +19,10 @@
   <insert id="insert" parameterType="com.turing.onebox.common.model.dto.StarredInfo" >
     insert into starred (id, name, dir, 
       type, ext, size, real_path, 
-      in_recycled)
+      in_recycled, create_time)
     values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{dir,jdbcType=VARCHAR}, 
       #{type,jdbcType=VARCHAR}, #{ext,jdbcType=VARCHAR}, #{size,jdbcType=INTEGER}, #{realPath,jdbcType=VARCHAR}, 
-      #{inRecycled,jdbcType=INTEGER})
+      #{inRecycled,jdbcType=INTEGER},#{createTime,jdbcType=VARCHAR})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.turing.onebox.common.model.dto.StarredInfo" >
     update starred
@@ -31,16 +32,17 @@
       ext = #{ext,jdbcType=VARCHAR},
       size = #{size,jdbcType=INTEGER},
       real_path = #{realPath,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=VARCHAR},
       in_recycled = #{inRecycled,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select id, name, dir, type, ext, size, real_path, in_recycled
+    select id, name, dir, type, ext, size, real_path, in_recycled, create_time
     from starred
     where id = #{id,jdbcType=INTEGER}
   </select>
   <select id="selectAll" resultMap="BaseResultMap" >
-    select id, name, dir, type, ext, size, real_path, in_recycled
+    select id, name, dir, type, ext, size, real_path, in_recycled, create_time
     from starred
   </select>
 </mapper>

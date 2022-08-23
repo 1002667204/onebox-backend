@@ -3,9 +3,7 @@ import com.turing.onebox.admin.service.UserService;
 import com.turing.onebox.common.model.dto.User;
 import com.turing.onebox.common.utils.AjaxJson;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -20,6 +18,7 @@ import javax.servlet.http.HttpSession;
  */
 @RestController
 @RequestMapping("/admin")
+@CrossOrigin
 public class LoginController {
 
     @Autowired
@@ -33,7 +32,7 @@ public class LoginController {
      * @return
      */
     @PostMapping("/login")
-    public AjaxJson<?> doLogin(String username, String password, String isRemPwd, HttpSession session, HttpServletResponse response) {
+    public AjaxJson<?> doLogin(String username,String password, String isRemPwd, HttpSession session, HttpServletResponse response) {
         User user =userService.queryUserByUsernameAndPwd(username, password);
 
         if (user == null){
@@ -43,7 +42,7 @@ public class LoginController {
             session.setAttribute("sessionUser",user);
 
             //如果需要记住密码，则往外写cookie
-            if("true".equals(isRemPwd)){
+           /* if("true".equals(isRemPwd)){
                 Cookie c1=new Cookie("username",user.getUsername());
                 c1.setMaxAge(10*24*60*60);
                 response.addCookie(c1);
@@ -58,7 +57,7 @@ public class LoginController {
                 Cookie c2=new Cookie("password","1");
                 c2.setMaxAge(0);
                 response.addCookie(c2);
-            }
+            }*/
             return AjaxJson.getSuccessData(user);
         }
     }

@@ -8,6 +8,7 @@
     <result column="secret" property="secret" jdbcType="INTEGER" />
     <result column="in_recycled" property="inRecycled" jdbcType="INTEGER" />
     <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
     <result column="star" property="star" jdbcType="INTEGER" />
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
@@ -17,10 +18,10 @@
   <insert id="insert" parameterType="com.turing.onebox.common.model.dto.Folder" >
     insert into folder (id, name, dir, 
       secret, in_recycled, password, 
-      star)
+      star, create_time)
     values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{dir,jdbcType=INTEGER}, 
       #{secret,jdbcType=INTEGER}, #{inRecycled,jdbcType=INTEGER}, #{password,jdbcType=VARCHAR}, 
-      #{star,jdbcType=INTEGER})
+      #{star,jdbcType=INTEGER},#{password,jdbcType=VARCHAR})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.turing.onebox.common.model.dto.Folder" >
     update folder
@@ -29,16 +30,17 @@
       secret = #{secret,jdbcType=INTEGER},
       in_recycled = #{inRecycled,jdbcType=INTEGER},
       password = #{password,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=VARCHAR},
       star = #{star,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select id, name, dir, secret, in_recycled, password, star
+    select id, name, dir, secret, in_recycled, password, star, create_time
     from folder
     where id = #{id,jdbcType=INTEGER}
   </select>
   <select id="selectAll" resultMap="BaseResultMap" >
-    select id, name, dir, secret, in_recycled, password, star
+    select id, name, dir, secret, in_recycled, password, star, create_time
     from folder
   </select>
   <update id="editFolderRecycledById" parameterType="java.lang.Integer">
@@ -46,4 +48,8 @@
       set in_recycled =1
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <select id="selectFolderByDir" resultType="com.turing.onebox.common.model.dto.Folder">
+    select *
+    from folder where dir = #{dir,jdbcType=INTEGER} and in_recycled = 0
+  </select>
 </mapper>

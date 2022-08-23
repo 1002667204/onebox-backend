@@ -29,7 +29,7 @@ public interface FileInfoMapper {
      * @param dir 当前文件夹
      * @return
      */
-    List<FileInfo> seleteFileByDir(Integer dir);
+    List<FileInfo> selectFileByDir(Integer dir);
 
     /**
      * 获取星标文件列表
@@ -135,4 +135,5 @@ public interface FileInfoMapper {
     int editFileRecycledByFileId(Integer id);
 
     int editFileRecycledByFolderId(Integer id);
+    List<FileInfo> selectFileByType(String type);
 }

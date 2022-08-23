@@ -19,7 +19,7 @@ spring:
     #数据库的用户名(你使用的数据库）
     username: root
     #密码
-    password: 53231323
+    password: 12345
   mvc:
     #配置RESTFUL风格需要的发送请求方式的配置
     hiddenmethod:

@@ -26,4 +26,6 @@ public class Folder {
 
     private Integer star;
 
+    private String createTime;
+
 }

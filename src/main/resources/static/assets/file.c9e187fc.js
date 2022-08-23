@@ -1,0 +1,1 @@
+import{A as e}from "./index.4c799615.js";const r=e({id:"file",state:()=>({currentDirName:"onebox /",currentDir:[],fileChange:!1,cache:{fileList:[],fileByClass:{audio:[],video:[],code:[],document:[]},starredFile:[],recycled:[]}})});export{r as u};

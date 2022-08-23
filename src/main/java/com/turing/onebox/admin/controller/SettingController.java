@@ -13,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/setting")
+@CrossOrigin
 public class SettingController {
 
     @Autowired

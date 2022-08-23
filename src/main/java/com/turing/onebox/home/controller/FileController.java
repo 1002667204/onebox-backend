@@ -1,16 +1,15 @@
 package com.turing.onebox.home.controller;
 
+
 import com.turing.onebox.common.utils.AjaxJson;
 import com.turing.onebox.common.model.result.FileItem;
 import com.turing.onebox.home.service.FileService;
+
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,6 +29,7 @@ public class FileController {
 
     /**
      * 获取文件列表
+     * 获取dir为参数的所有文件和文件夹
      *
      * @Return AjaxJson.getSuccessData(fileItemList)
      */
@@ -37,12 +37,22 @@ public class FileController {
     public AjaxJson<?> list(Integer id) {
         //没有name的话报错
         if (id != null) {
-            List<FileItem> fileItemList = fileService.transIntoFileItem(fileService.fileList(id));
-            return AjaxJson.getSuccessData(fileItemList);
+           List<FileItem> fileItems = fileService.queryFileItemByDir(id);
+            return AjaxJson.getSuccessData(fileItems);
         } else {
-            return AjaxJson.getError("NullPointFolderName");
+            return AjaxJson.getError("未找到文件");
         }
 
+    }
+
+    /**
+     * 根据类型获取文件
+     *
+     */
+    @PostMapping("/type")
+    public AjaxJson<?> listFileByType(String type){
+        List<FileItem> fileItems = fileService.queryFileByType(type);
+        return AjaxJson.getSuccessData(fileItems);
     }
 
 
@@ -51,7 +61,7 @@ public class FileController {
      *
      * @Return AjaxJson.getSuccessData(fileItemList)
      */
-    @PostMapping("/starredfiles")
+    @PostMapping("/starredFiles")
     public AjaxJson<?> listStarred() {
 
         List<FileItem> fileItemList = fileService.starredList();

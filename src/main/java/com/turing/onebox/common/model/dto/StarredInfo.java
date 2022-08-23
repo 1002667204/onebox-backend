@@ -28,4 +28,6 @@ public class StarredInfo {
 
     private Integer inRecycled;
 
+    private String createTime;
+
 }

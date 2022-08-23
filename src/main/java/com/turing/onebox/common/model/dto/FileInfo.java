@@ -34,4 +34,6 @@ public class FileInfo {
 
     private Integer star;
 
+    private String createTime;
+
 }

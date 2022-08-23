@@ -40,8 +40,7 @@ public class SettingService {
         // 清空config_class表
         Integer i = classInfoMapper.clearClassInfo();
         // 更新config_class表
-        for (ClassInfo classInfo:
-             newClassInfoList) {
+        for (ClassInfo classInfo: newClassInfoList) {
             classInfo.setId(UUIDUtils.getUUID());
             int current = classInfoMapper.updateClassInfo(classInfo);
             sum += current;

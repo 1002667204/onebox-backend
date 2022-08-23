@@ -20,5 +20,7 @@ public interface FolderMapper {
 
     int editFolderRecycledById(Integer id);
 
+    List<Folder> selectFolderByDir(Integer id);
+
 
 }

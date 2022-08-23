@@ -1,10 +1,12 @@
 package com.turing.onebox.home.controller;
 
+import com.turing.onebox.common.constant.OneboxConstant;
 import com.turing.onebox.common.model.dto.Folder;
 import com.turing.onebox.common.model.result.FileItem;
 import com.turing.onebox.common.utils.AjaxJson;
 import com.turing.onebox.common.utils.UUIDUtils;
 import com.turing.onebox.home.service.FileService;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,6 +15,7 @@ import javax.annotation.Resource;
 
 @RestController
 @RequestMapping("/api")
+@CrossOrigin
 public class FileOperatorController {
 
     @Resource
@@ -28,15 +31,13 @@ public class FileOperatorController {
 
         //先生成Folder对象
         Folder folder = new Folder();
-
-        int uuid = UUIDUtils.getUUID();
-        folder.setId(uuid);
+        folder.setId(UUIDUtils.getUUID());
         folder.setName(name);
         folder.setDir(dir);
         folder.setSecret(secret);
-        folder.setInRecycled(0);
+        folder.setInRecycled(OneboxConstant.NOT_IN_RECYCLED);
         folder.setPassword(password);
-        folder.setStar(0);
+        folder.setStar(OneboxConstant.IS_NOT_STARRED);
 
         if (fileService.newFolder(folder)) {
             return AjaxJson.getSuccessData(new FileItem(folder));
