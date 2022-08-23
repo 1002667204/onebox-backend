@@ -2,6 +2,7 @@ package com.turing.onebox.admin.controller;
 
 import cn.hutool.json.JSONArray;
 import com.turing.onebox.admin.service.SettingService;
+import com.turing.onebox.common.model.result.ReSettingItem;
 import com.turing.onebox.common.model.result.SettingItem;
 import com.turing.onebox.common.utils.AjaxJson;
 import com.turing.onebox.common.model.dto.ClassInfo;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/setting")
@@ -33,8 +35,17 @@ public class SettingController {
      * 保存设置
      */
     @PostMapping("/save")
-    public AjaxJson<?> saveAllSetting(@RequestBody List<ClassInfo> newClassInfoList){
-        if (settingService.updateClassList(newClassInfoList)){
+    public AjaxJson<?> saveAllSetting(@RequestBody Map<String,Object> map){
+        System.out.println(map);
+        List<ClassInfo> classInfos = new ArrayList<>();
+        for (String key: map.keySet()){
+            List<String> classes = (List<String>) map.get(key);
+            for (String ext:classes){
+                classInfos.add(new ClassInfo(key,ext));
+            }
+        }
+
+        if (settingService.updateClassList(classInfos)){
             return AjaxJson.getSuccess("保存成功");
         } else {
             return AjaxJson.getError("保存失败");

@@ -6,7 +6,6 @@ import com.turing.onebox.common.model.dto.ImportUser;
 import com.turing.onebox.common.model.dto.LogInfo;
 import com.turing.onebox.common.utils.AjaxJson;
 import com.turing.onebox.common.utils.DateUtils;
-import com.turing.onebox.common.utils.FileConfig;
 import com.turing.onebox.common.utils.UUIDUtils;
 import com.turing.onebox.home.service.ClassInfoService;
 import com.turing.onebox.home.service.FileService;
@@ -46,11 +45,6 @@ public class UploadController {
     @Value("${huang.file.upload.path}")
     public   String FILE_UPLOAD_PATH;
 
-/*
-    @Autowired
-    private FileConfig fileConfig;
-*/
-
     @Resource
     private HttpServletRequest httpServletRequest;
     @Autowired
@@ -63,9 +57,9 @@ public class UploadController {
     private ClassInfoService classInfoService;
 
     /**
+     * @Author HuangYuhan
      * @return
      * @throws IOException
-     * @Author HuangYuhan
      * @Description name需要prefix，type需要判断，ext需要
      * suffix,size需要从kb变成mb，realpath是path+originalName
      * 需要考虑日志更新
@@ -73,12 +67,11 @@ public class UploadController {
      * (查询在相同文件夹下的是否有同名的文件：dir，name）
      * 1.文件大小用kb还是mb
      * 2.类型判断
-     * （根据后缀，查询其所属类型）
+     *（根据后缀，查询其所属类型）
      */
     @PostMapping("/file/upload/**")
     @ResponseBody
     public AjaxJson<?> upload(ImportUser importUser, BindingResult bindingResult) throws IOException {
-
         MultipartFile file = importUser.getFile();
         System.out.println(file);
         Integer dir = importUser.getId();
@@ -86,22 +79,34 @@ public class UploadController {
         if (file == null || file.isEmpty()) {
             return AjaxJson.getError("文件为空，无法上传.");
         }
+        //将文件上传至指定路径
+//      获取文件全路径
+//        Path path = Paths.get(FILE_UPLOAD_PATH + file.getOriginalFilename());
+        Path path = Paths.get(OneboxConstant.ROOT_FILE_PATH + OneboxConstant.PATH_SEPARATOR + file.getOriginalFilename());
 
+        System.out.println(path.toString());
+        byte[] bytes;
+        try {
+//        获取文件流
+            bytes = file.getBytes();
+//        将文件写入指定路径
+            Files.write(path, bytes);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return AjaxJson.getError("写入文件至指定路径失败");
+        }
+        //System.out.println("至此文件上传结束");
 //        更新文件列表
 //        创建FileInfo类存储文件信息
         FileInfo fileInfo = new FileInfo();
-        String fileName = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf("."));
-      //  设置每个文件的唯一文件名
-        Integer onlyId=UUIDUtils.getUUID();
-        String fileOnlyName=fileName+onlyId;
+        String fileName =file.getOriginalFilename().substring(0,file.getOriginalFilename().lastIndexOf("."));
         fileInfo.setName(fileName);
 //        检查文件是否重命名，如果名字已经存在，则直接不允许存储
         boolean flag = fileService.queryFileByFileNameAndDir(fileName, dir);
         if (!flag) {
             return AjaxJson.getError("文件名已经存在于该文件夹，上传失败");
         }
-
-        fileInfo.setId(onlyId);
+        fileInfo.setId(UUIDUtils.getUUID());
         fileInfo.setDir(dir);
         String fileSuffix = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
         fileInfo.setExt(fileSuffix);
@@ -109,7 +114,7 @@ public class UploadController {
         String className = getClassNameByExt(fileSuffix, classInfoService);
         if (className.equals("false")) {
             return AjaxJson.getError("该文件后缀找不到所属类型");
-        } else {
+        }else {
             fileInfo.setType(className);
         }
 //        ---------------
@@ -120,8 +125,7 @@ public class UploadController {
         fileInfo.setSize(fileSize);
         fileInfo.setCreateTime(DateUtils.formateDateTime(new Date()));
 //        -------------------
-//        真实路径就是：路径+文件名+唯一id+后缀
-        fileInfo.setRealPath(FILE_UPLOAD_PATH + fileOnlyName+fileSuffix);
+        fileInfo.setRealPath(FILE_UPLOAD_PATH + file.getOriginalFilename());
         fileInfo.setInRecycled(OneboxConstant.NOT_IN_RECYCLED);
         fileInfo.setStar(OneboxConstant.IS_NOT_STARRED);
 //        通过service层存储File信息
@@ -137,25 +141,9 @@ public class UploadController {
             boolean fileFlag = fileService.uploadFile(fileInfo);
             boolean logFlag = logService.addLogInfo(logInfo);
             if (fileFlag && logFlag) {
-//                影响行数为1表示插入文件在数据库成功
-                //将文件上传至指定路径
-//               获取文件的
-//      获取文件全路径:路径+文件名+唯一id+后缀
-                Path path = Paths.get(FILE_UPLOAD_PATH +fileOnlyName+fileSuffix);
-                System.out.println(path.toString());
-                byte[] bytes;
-                try {
-//        获取文件流
-                    bytes = file.getBytes();
-//        将文件写入指定路径
-                    Files.write(path, bytes);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    return AjaxJson.getError("写入文件至指定路径失败");
-                }
-                //System.out.println("至此文件上传结束");
+//                影响行数为1
                 return AjaxJson.getSuccess("成功将文件信息保存至数据库且更新日志成功");
-            } else {
+            }else {
                 return AjaxJson.getError("文件信息保存数据库失败或者日志更新失败");
             }
         } catch (Exception e) {

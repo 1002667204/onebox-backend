@@ -1,5 +1,8 @@
 package com.turing.onebox.admin.controller;
+import com.turing.onebox.admin.service.InitService;
 import com.turing.onebox.admin.service.UserService;
+import com.turing.onebox.common.constant.OneboxConstant;
+import com.turing.onebox.common.model.dto.Folder;
 import com.turing.onebox.common.model.dto.User;
 import com.turing.onebox.common.utils.AjaxJson;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.File;
 
 /**
  * @ClassName LoginController
@@ -23,6 +27,9 @@ public class LoginController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private InitService initService;
 
     /**
      * 返回根目录文件列表
@@ -58,6 +65,11 @@ public class LoginController {
                 c2.setMaxAge(0);
                 response.addCookie(c2);
             }*/
+            // 初始化根目录
+            if (!initService.checkRootDir()){
+                return AjaxJson.getError("初始化根目录失败");
+            }
+
             return AjaxJson.getSuccessData(user);
         }
     }

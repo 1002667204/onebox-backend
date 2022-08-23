@@ -1,7 +1,9 @@
 package com.turing.onebox.common.model.dto;
 
+import com.turing.onebox.common.utils.UUIDUtils;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @ClassName ClassInfo
@@ -12,6 +14,7 @@ import lombok.Data;
  */
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class ClassInfo {
 
     private Integer id;
@@ -20,4 +23,9 @@ public class ClassInfo {
 
     private String ext;
 
+    public ClassInfo(String className, String ext){
+        this.id = UUIDUtils.getUUID();
+        this.className = className;
+        this.ext = ext;
+    }
 }

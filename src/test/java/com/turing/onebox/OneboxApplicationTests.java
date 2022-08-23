@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
 import java.util.UUID;
 
 @SpringBootTest
@@ -50,5 +51,10 @@ class OneboxApplicationTests {
     @Test
     void testClearInfo(){
         classInfoMapper.clearClassInfo();
+    }
+
+    @Test
+    void testFileSeparator(){
+        System.out.println(File.separator);
     }
 }

@@ -1,10 +1,13 @@
 package com.turing.onebox.home.controller;
 
 import com.turing.onebox.common.constant.OneboxConstant;
+import com.turing.onebox.common.model.dto.FileInfo;
 import com.turing.onebox.common.model.dto.Folder;
 import com.turing.onebox.common.model.result.FileItem;
 import com.turing.onebox.common.utils.AjaxJson;
+import com.turing.onebox.common.utils.DateUtils;
 import com.turing.onebox.common.utils.UUIDUtils;
+import com.turing.onebox.home.mapper.FolderMapper;
 import com.turing.onebox.home.service.FileService;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.Date;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api")
@@ -38,6 +43,7 @@ public class FileOperatorController {
         folder.setInRecycled(OneboxConstant.NOT_IN_RECYCLED);
         folder.setPassword(password);
         folder.setStar(OneboxConstant.IS_NOT_STARRED);
+        folder.setCreateTime(DateUtils.formateDateTime(new Date()));
 
         if (fileService.newFolder(folder)) {
             return AjaxJson.getSuccessData(new FileItem(folder));
@@ -54,13 +60,18 @@ public class FileOperatorController {
      */
     @PostMapping("/delete/file")
     public AjaxJson<?> deleteFile(Integer id) {
-        if (fileService.deleteFile(id)) {
-            return AjaxJson.getSuccess("删除成功");
+        FileInfo fileInfo = fileService.queryFileById(id);
+        if (Objects.equals(fileInfo.getInRecycled(), OneboxConstant.NOT_IN_RECYCLED)) {
+            if (fileService.deleteFile(id)) {
+                return AjaxJson.getSuccess("删除成功");
+            }
         } else {
-            return AjaxJson.getError("删除失败，请检查文件是否存在");
+            if (fileService.removeFile(id)) {
+                return AjaxJson.getSuccess("删除成功");
+            }
         }
+        return AjaxJson.getError("删除失败");
     }
-
     /**
      * 删除文件夹
      * @param
@@ -68,10 +79,15 @@ public class FileOperatorController {
      */
     @PostMapping("/delete/folder")
     public AjaxJson<?> deleteFolder(Integer id) {
-        if (fileService.deleteFolder(id)){
-            return AjaxJson.getSuccess();
+        Folder folder = fileService.queryFolderById(id);
+        if (Objects.equals(folder.getId(), OneboxConstant.NOT_IN_RECYCLED)) {
+            if (fileService.deleteFolder(id)) {
+                return AjaxJson.getSuccess("删除成功");
+            }
         } else {
-            return AjaxJson.getError("删除失败");
+            if (fileService.removeFolder(id)) {
+                return AjaxJson.getSuccess("删除成功");
+            }
         }
     }
 
@@ -111,19 +127,22 @@ public class FileOperatorController {
     }
 
 
+        /**
+         * 设置文件星标状态 AjaxJson.getSuccess()
+         */
+        @PostMapping("/starred")
+        public AjaxJson<?> starredFile (Integer id, Integer starred, Integer type){
+            if (type == 1) {
+                fileService.starredFolder(id, starred);
+                if (starred == 0) return AjaxJson.getSuccess("取消星标成功");
+                if (starred == 1) return AjaxJson.getSuccess("设置星标成功");
 
-    /**
-     * 设置文件星标状态 AjaxJson.getSuccess()
-     */
-    @PostMapping("/starred")
-    public AjaxJson<?> starredFile(Integer id, Integer starred){
-        if (fileService.starredFile(id, starred)){
-            if (starred == 0) return AjaxJson.getSuccess("取消星标成功");
-            if (starred == 1) return AjaxJson.getSuccess("设置星标成功");
-            return AjaxJson.getError("非法星标状态");
-        } else {
+            } else {
+                fileService.starredFile(id, starred);
+                if (starred == 0) return AjaxJson.getSuccess("取消星标成功");
+                if (starred == 1) return AjaxJson.getSuccess("设置星标成功");
+            }
             return AjaxJson.getError("设置星标状态失败");
         }
-    }
 
-}
+    }

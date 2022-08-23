@@ -67,16 +67,16 @@
 
     <build>
         <!--将java源文件中的xml文件编译输出在target的类路径中-->
-        <resources>
-            <resource>
-                <!--将src/main/java下的·····-->
-                <directory>src/main/java</directory>
-                <includes>
-                    <!--java下的所有的子包下的任意的xml文件-->
-                    <include>**/*.xml</include>
-                </includes>
-            </resource>
-        </resources>
+<!--        <resources>-->
+<!--            <resource>-->
+<!--                &lt;!&ndash;将src/main/java下的·····&ndash;&gt;-->
+<!--                <directory>src/main/java</directory>-->
+<!--                <includes>-->
+<!--                    &lt;!&ndash;java下的所有的子包下的任意的xml文件&ndash;&gt;-->
+<!--                    <include>**/*.xml</include>-->
+<!--                </includes>-->
+<!--            </resource>-->
+<!--        </resources>-->
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

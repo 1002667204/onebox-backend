@@ -21,7 +21,7 @@
       star, create_time)
     values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{dir,jdbcType=INTEGER}, 
       #{secret,jdbcType=INTEGER}, #{inRecycled,jdbcType=INTEGER}, #{password,jdbcType=VARCHAR}, 
-      #{star,jdbcType=INTEGER},#{password,jdbcType=VARCHAR})
+      #{star,jdbcType=INTEGER},#{createTime,jdbcType=VARCHAR})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.turing.onebox.common.model.dto.Folder" >
     update folder

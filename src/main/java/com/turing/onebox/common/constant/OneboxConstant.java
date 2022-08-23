@@ -3,6 +3,8 @@ package com.turing.onebox.common.constant;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
+import java.io.File;
+
 /**
  * @ClassName OneboxConstant
  * @Description TODO
@@ -15,7 +17,8 @@ public class OneboxConstant {
 
     public static final Character PATH_SEPARATOR_CHAR = '/';
 
-    public static final String PATH_SEPARATOR = "/";
+//    public static final String PATH_SEPARATOR = "/";
+    public static final String PATH_SEPARATOR = File.separator;
 
     /**
      * 是否是标星文件
@@ -41,6 +44,11 @@ public class OneboxConstant {
      * 系统产生的临时文件路径
      */
     public static String TEMP_FILE_PATH = "/.onebox/temp/";
+
+    /**
+     * 系统保存文件的根目录
+     */
+    public static String ROOT_FILE_PATH = System.getProperty("user.dir") + PATH_SEPARATOR + "onebox_files";
 
 
     /**

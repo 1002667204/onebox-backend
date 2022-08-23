@@ -102,6 +102,12 @@ public interface FileInfoMapper {
     Integer starredFile(FileInfo fileInfo);
 
     /**
+     * 删除星标文件记录
+     */
+    @Delete("delete from starred where id = #{id}")
+    Integer unStarredFile(Integer id);
+
+    /**
      * @Author HuangYuhan
      * @param fileName
      * @param dir

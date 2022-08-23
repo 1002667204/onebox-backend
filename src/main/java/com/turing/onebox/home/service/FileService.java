@@ -99,11 +99,11 @@ public class FileService {
      */
     public boolean newFolder(Folder folder) {
         // 判断当前目录下是否有同名文件夹
-        if (fileInfoMapper.selectFolderByNameAndDir(folder) != 0){
+        if (fileInfoMapper.selectFolderByNameAndDir(folder) != null){
             return false;
         }
         // 新增文件夹
-        return fileInfoMapper.newFolder(folder) == 1;
+        return folderMapper.insert(folder) == 1;
     }
 
 
@@ -233,19 +233,48 @@ public class FileService {
      * @return
      */
     public boolean starredFile(Integer id, Integer starred){
-
         // 获取文件当前星标状态
         FileInfo fileInfo = fileInfoMapper.selectByPrimaryKey(id);
         if (Objects.equals(fileInfo.getStar(), starred)) return false;
         // 修改文件星标字段
-        if (fileInfoMapper.updateByPrimaryKey(fileInfo) == 0) return false;
-        // 在starred表中添加记录
         fileInfo.setStar(starred);
-        System.out.println(fileInfo.getRealPath());
-        return fileInfoMapper.starredFile(fileInfo) == 1;
+        if (fileInfoMapper.updateByPrimaryKey(fileInfo) == 0) return false;
+        // 如果星标状态为1则在starred表中添加记录，星标状态为0在starred表中删除记录
+        if (starred == 1){
+            return fileInfoMapper.starredFile(fileInfo) == 1;
+        } else {
+            return fileInfoMapper.unStarredFile(id) == 1;
+        }
     }
 
-
+    /**
+     * 设置星标文件夹
+     */
+    public boolean starredFolder(Integer id, Integer starred){
+        // 获取文件夹星标状态
+        Folder folder = folderMapper.selectByPrimaryKey(id);
+        if (Objects.equals(folder.getStar(), starred)) return false;
+        // 修改文件夹星标字段
+        folder.setStar(starred);
+        if (folderMapper.updateByPrimaryKey(folder) == 0) return false;
+        // 如果星标状态为1则在starred表中添加记录，星标状态为0在starred表中删除记录
+        if (starred == 1){
+            StarredInfo starredInfo = new StarredInfo();
+            starredInfo.setId(folder.getId());
+            starredInfo.setName(folder.getName());
+            starredInfo.setDir(folder.getDir());
+            if (folder.getSecret() == 1){
+                starredInfo.setType("sercetFolder");
+            } else {
+                starredInfo.setType("folder");
+            }
+            starredInfo.setInRecycled(folder.getInRecycled());
+            starredInfo.setCreateTime(folder.getCreateTime());
+            return starredInfoMapper.insert(starredInfo) == 1;
+        } else {
+            return starredInfoMapper.deleteByPrimaryKey(id) == 1;
+        }
+    }
 
     /**
      * 根据文件的名字和所属父类文件查询是否重命名
