@@ -72,7 +72,6 @@ public class RecycledService {
                         fileItems.add(new FileItem(fileInfo));
                     }else {
                         Folder folder = folderMapper.selectByPrimaryKey(recycledInfo.getFileId());
-                        System.out.println(folder);
                         fileItems.add(new FileItem(folder));
                     }
                 }
@@ -105,7 +104,7 @@ public class RecycledService {
     }
 
     /**
-     * 删除回收站中的某一个文件
+     * 删除回收站中的某一个文件或文件夹
      */
     public boolean completelyDeleteFile(Integer id){
         RecycledInfo recycledInfo = recycledInfoMapper.selectByFileId(id);

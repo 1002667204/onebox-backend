@@ -53,11 +53,13 @@ public class SettingController {
     }
 
     // 每次修改设置后前端都返回整个文件分类表
+    // }
 
 //    /**
 //     * 添加后缀
 //     */
-//    @PostMapping("/ext/add")
+//   @P
+//      ostMapping("/ext/add")
 //    public AjaxJson<?> addExt(Integer id, String newExt){
 //        return null;
 //    }

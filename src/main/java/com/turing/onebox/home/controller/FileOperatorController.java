@@ -89,42 +89,43 @@ public class FileOperatorController {
                 return AjaxJson.getSuccess("删除成功");
             }
         }
+        return AjaxJson.getError("删除失败");
     }
 
-    /**
-     * 重命名文件
-     * @param
-     * @return AjaxJson.getSuccess()
-     */
-    @PostMapping("/rename/file")
-    public AjaxJson<?> rename(Integer id, String newName) {
-        //先判断newName是否为空
-        if(newName == null || newName.equals("")){
-            return AjaxJson.getError("重命名失败，文件名不能为空");
+        /**
+         * 重命名文件
+         * @param
+         * @return AjaxJson.getSuccess()
+         */
+        @PostMapping("/rename/file")
+        public AjaxJson<?> rename (Integer id, String newName){
+            //先判断newName是否为空
+            if (newName == null || newName.equals("")) {
+                return AjaxJson.getError("重命名失败，文件名不能为空");
+            }
+
+            if (fileService.renameFile(id, newName)) {
+                return AjaxJson.getSuccess();
+            } else {
+                return AjaxJson.getError("重命名失败");
+            }
+
         }
 
-        if (fileService.renameFile(id, newName)){
-            return AjaxJson.getSuccess();
-        } else {
-            return AjaxJson.getError("重命名失败");
+
+        /**
+         * 重命名文件夹
+         * @param
+         * @return AjaxJson.getSuccess()
+         */
+        @PostMapping("/rename/folder")
+        public AjaxJson<?> renameFolder (Integer id, String newName){
+            //先判断newName是否为空
+            if (newName == null || newName.equals("")) {
+                return AjaxJson.getError("NullPointNewName");
+            }
+            return AjaxJson.getSuccessData(fileService.renameFolder(id, newName));
         }
-
-    }
-
-
-    /**
-     * 重命名文件夹
-     * @param
-     * @return AjaxJson.getSuccess()
-     */
-    @PostMapping("/rename/folder")
-    public AjaxJson<?> renameFolder(Integer id, String newName) {
-        //先判断newName是否为空
-        if(newName == null || newName.equals("")){
-            return AjaxJson.getError("NullPointNewName");
-        }
-        return AjaxJson.getSuccessData(fileService.renameFolder(id, newName));
-    }
 
 
         /**

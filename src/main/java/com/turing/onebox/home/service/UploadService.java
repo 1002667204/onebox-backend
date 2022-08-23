@@ -26,10 +26,6 @@ public class UploadService {
 //        BufferedOutputStream outputStream = FileUtil.getOutputStream(uploadToFileObj);
 //        IoUtil.copy(inputStream, outputStream);
 
-
-
-
-
     }
 
 }

@@ -63,6 +63,12 @@ public class FileService {
         return fileItems;
 
     }
+    public FileInfo queryFileById(Integer id){
+        return fileInfoMapper.selectByPrimaryKey(id);
+    }
+    public Folder queryFolderById(Integer id){
+        return folderMapper.selectByPrimaryKey(id);
+    }
     /**
      *
      */
@@ -167,9 +173,14 @@ public class FileService {
         for (FileInfo fileInfo : fileInfoMapper.selectFileByDir(id)) {
             if (removeFile(fileInfo.getId())) count++;
         }
-        return (count > 0);
-
         // 删除文件夹内的文件夹
+        List<Folder> folders = folderMapper.selectFolderByDir(id);
+        if (folders != null){
+            for (Folder folder: folders){
+                if (removeFolder(folder.getId())) count++;
+            }
+        }
+        return count>0;
 
     }
 
