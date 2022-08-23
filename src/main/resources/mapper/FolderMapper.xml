@@ -51,6 +51,7 @@
   <select id="selectFolderByDir" resultType="com.turing.onebox.common.model.dto.Folder">
     select *
     from folder where dir = #{dir,jdbcType=INTEGER} and in_recycled = 0
+    order by create_time desc
   </select>
   <select id="selectFolderByIdAndPassword" parameterType="java.util.Map" resultMap="BaseResultMap">
     select *

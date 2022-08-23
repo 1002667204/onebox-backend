@@ -5,6 +5,7 @@ import com.turing.onebox.home.mapper.LogInfoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.logging.LogManager;
 
 /**
@@ -30,6 +31,10 @@ public class LogService {
             return false;
         }
 
+    }
+
+    public List<LogInfo> queryAllLog(){
+        return logInfoMapper.selectAll();
     }
 
 

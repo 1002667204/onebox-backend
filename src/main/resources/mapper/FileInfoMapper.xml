@@ -51,6 +51,7 @@
   <select id="selectFileByDir" resultType="com.turing.onebox.common.model.dto.FileInfo">
     select *
     from file where dir = #{dir,jdbcType=INTEGER} and in_recycled = 0
+    order by create_time desc
   </select>
 
 <!--FileInfo selectFileByFileNameAndDir(String fileName, Integer dir);-->
