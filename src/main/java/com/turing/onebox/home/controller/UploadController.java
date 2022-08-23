@@ -82,31 +82,38 @@ public class UploadController {
         //将文件上传至指定路径
 //      获取文件全路径
 //        Path path = Paths.get(FILE_UPLOAD_PATH + file.getOriginalFilename());
-        Path path = Paths.get(OneboxConstant.ROOT_FILE_PATH + OneboxConstant.PATH_SEPARATOR + file.getOriginalFilename());
 
-        System.out.println(path.toString());
-        byte[] bytes;
-        try {
-//        获取文件流
-            bytes = file.getBytes();
-//        将文件写入指定路径
-            Files.write(path, bytes);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return AjaxJson.getError("写入文件至指定路径失败");
-        }
-        //System.out.println("至此文件上传结束");
+        //tagzzzzzzzzzz
+//        Path path = Paths.get(OneboxConstant.ROOT_FILE_PATH + OneboxConstant.PATH_SEPARATOR + file.getOriginalFilename());
+//
+//        System.out.println(path.toString());
+//        byte[] bytes;
+//        try {
+////        获取文件流
+//            bytes = file.getBytes();
+////        将文件写入指定路径
+//            Files.write(path, bytes);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            return AjaxJson.getError("写入文件至指定路径失败");
+//        }
+//        //System.out.println("至此文件上传结束");
+        //tagzzzzzzzzzz
+
 //        更新文件列表
 //        创建FileInfo类存储文件信息
         FileInfo fileInfo = new FileInfo();
         String fileName =file.getOriginalFilename().substring(0,file.getOriginalFilename().lastIndexOf("."));
+        //  设置每个文件的唯一文件名
+        Integer onlyId = UUIDUtils.getUUID();
+        String fileOnlyName = fileName + onlyId;
         fileInfo.setName(fileName);
 //        检查文件是否重命名，如果名字已经存在，则直接不允许存储
         boolean flag = fileService.queryFileByFileNameAndDir(fileName, dir);
         if (!flag) {
             return AjaxJson.getError("文件名已经存在于该文件夹，上传失败");
         }
-        fileInfo.setId(UUIDUtils.getUUID());
+        fileInfo.setId(onlyId);
         fileInfo.setDir(dir);
         String fileSuffix = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
         fileInfo.setExt(fileSuffix);
@@ -125,7 +132,8 @@ public class UploadController {
         fileInfo.setSize(fileSize);
         fileInfo.setCreateTime(DateUtils.formateDateTime(new Date()));
 //        -------------------
-        fileInfo.setRealPath(FILE_UPLOAD_PATH + file.getOriginalFilename());
+        //        真实路径就是：路径+文件名+唯一id+后缀
+        fileInfo.setRealPath(FILE_UPLOAD_PATH + fileOnlyName + fileSuffix);
         fileInfo.setInRecycled(OneboxConstant.NOT_IN_RECYCLED);
         fileInfo.setStar(OneboxConstant.IS_NOT_STARRED);
 //        通过service层存储File信息
@@ -141,7 +149,22 @@ public class UploadController {
             boolean fileFlag = fileService.uploadFile(fileInfo);
             boolean logFlag = logService.addLogInfo(logInfo);
             if (fileFlag && logFlag) {
-//                影响行数为1
+                // 影响行数为1表示插入文件在数据库成功
+                // 将文件上传至指定路径
+	            // 获取文件全路径:路径+文件名+唯一id+后缀
+                Path path = Paths.get(FILE_UPLOAD_PATH +fileOnlyName+fileSuffix);
+                System.out.println(path.toString());
+                byte[] bytes;
+                try {
+	                // 获取文件流
+                    bytes = file.getBytes();
+	                // 将文件写入指定路径
+                    Files.write(path, bytes);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return AjaxJson.getError("写入文件至指定路径失败");
+                }
+                //System.out.println("至此文件上传结束");
                 return AjaxJson.getSuccess("成功将文件信息保存至数据库且更新日志成功");
             }else {
                 return AjaxJson.getError("文件信息保存数据库失败或者日志更新失败");
