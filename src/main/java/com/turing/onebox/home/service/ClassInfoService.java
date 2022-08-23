@@ -16,8 +16,7 @@ public class ClassInfoService {
     private ClassInfoMapper classInfoMapper;
 
     public String queryClassNameByExt(String ext) {
-        String className = classInfoMapper.selectClassNameByExt(ext);
 
-        return className;
+        return classInfoMapper.selectClassNameByExt(ext);
     }
 }

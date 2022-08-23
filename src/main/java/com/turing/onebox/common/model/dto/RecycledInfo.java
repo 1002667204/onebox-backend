@@ -33,7 +33,7 @@ public class RecycledInfo {
         this.id = UUIDUtils.getUUID();
         this.deleteTime = DateUtils.formateDateTime(new Date());
         this.destroyTime = DateUtils.future30Days(new Date());
-        this.id = id;
+        this.fileId = id;
 
     }
 }

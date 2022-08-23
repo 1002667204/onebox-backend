@@ -1,6 +1,7 @@
 package com.turing.onebox.home.controller;
 
 
+import com.turing.onebox.common.model.dto.Folder;
 import com.turing.onebox.common.utils.AjaxJson;
 import com.turing.onebox.common.model.result.FileItem;
 import com.turing.onebox.home.service.FileService;
@@ -10,7 +11,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName FileController
@@ -34,15 +37,28 @@ public class FileController {
      * @Return AjaxJson.getSuccessData(fileItemList)
      */
     @PostMapping("/files")
-    public AjaxJson<?> list(Integer id) {
+    public AjaxJson<?> list(Integer id,String password) {
         //没有name的话报错
         if (id != null) {
-           List<FileItem> fileItems = fileService.queryFileItemByDir(id);
-            return AjaxJson.getSuccessData(fileItems);
-        } else {
-            return AjaxJson.getError("未找到文件");
-        }
+            if (password == null){
+                List<FileItem> fileItems = fileService.queryFileItemByDir(id);
+                return AjaxJson.getSuccessData(fileItems);
+            }else {
+                Map<String, Object> map = new HashMap<>();
+                map.put("id",id);
+                map.put("password",password);
+                Folder folder = fileService.queryFolderByIdAndPassword(map);
+                if (folder != null){
+                    List<FileItem> fileItems = fileService.queryFileItemByDir(id);
+                    return AjaxJson.getSuccessData(fileItems);
 
+                }else {
+                    return AjaxJson.getError("密码错误请重试");
+                }
+
+            }
+        }
+        return AjaxJson.getError("未找到文件");
     }
 
     /**
@@ -70,7 +86,7 @@ public class FileController {
         if(fileItemList != null){
             return AjaxJson.getSuccessData(fileItemList);
         }else {
-            return AjaxJson.getError("NullStarredFile");
+            return AjaxJson.getError("为找到标星文件");
         }
     }
 

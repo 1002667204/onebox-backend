@@ -19,10 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 
 @Service
@@ -75,6 +72,11 @@ public class FileService {
         return TransUtils.fileInfoTransToFileItem(fileInfos);
     }
 
+    public Folder queryFolderByIdAndPassword(Map<String,Object> map){
+        return folderMapper.selectFolderByIdAndPassword(map);
+
+    }
+
     /**
      * 获取星标文件列表
      * @return
@@ -112,11 +114,10 @@ public class FileService {
      */
     public boolean deleteFile(Integer id) {
         // 设置文件的in_recycled字段为1
-        if (fileInfoMapper.deleteFile(id) == 0) return false;
+        if (fileInfoMapper.editFileRecycledByFileId(id) == 0) return false;
         // 在回收站中增加记录
-        Date deleteTime = new Date();
-        RecycledInfo recycledInfo = new RecycledInfo(UUIDUtils.getUUID(), DateUtils.formateDateTime(deleteTime), DateUtils.future30Days(new Date()), id);
-        return fileInfoMapper.newRecycledInfo(recycledInfo) == 1;
+        RecycledInfo recycledInfo = new RecycledInfo(id);
+        return recycledInfoMapper.insert(recycledInfo) == 1;
     }
 
     /**
@@ -240,6 +241,7 @@ public class FileService {
         if (fileInfoMapper.updateByPrimaryKey(fileInfo) == 0) return false;
         // 在starred表中添加记录
         fileInfo.setStar(starred);
+        System.out.println(fileInfo.getRealPath());
         return fileInfoMapper.starredFile(fileInfo) == 1;
     }
 

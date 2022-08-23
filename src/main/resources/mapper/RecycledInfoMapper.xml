@@ -42,4 +42,5 @@
     select id, delete_time, destroy_time, file_id
     from recycled
   </select>
+
 </mapper>

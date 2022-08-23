@@ -14,7 +14,7 @@ public interface RecycledInfoMapper {
 
     RecycledInfo selectByFileId(Integer id);
 
-    int insert(RecycledInfo record);
+    int insert(RecycledInfo recycledInfo);
 
     RecycledInfo selectByPrimaryKey(Integer id);
 

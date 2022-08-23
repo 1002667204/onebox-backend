@@ -22,7 +22,7 @@
       in_recycled, create_time)
     values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{dir,jdbcType=VARCHAR}, 
       #{type,jdbcType=VARCHAR}, #{ext,jdbcType=VARCHAR}, #{size,jdbcType=INTEGER}, #{realPath,jdbcType=VARCHAR}, 
-      #{inRecycled,jdbcType=INTEGER},#{createTime,jdbcType=VARCHAR})
+      #{inRecycled,jdbcType=INTEGER}, #{createTime,jdbcType=VARCHAR})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.turing.onebox.common.model.dto.StarredInfo" >
     update starred

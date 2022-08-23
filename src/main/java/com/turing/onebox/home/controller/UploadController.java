@@ -2,6 +2,7 @@ package com.turing.onebox.home.controller;
 
 import com.turing.onebox.common.constant.OneboxConstant;
 import com.turing.onebox.common.model.dto.FileInfo;
+import com.turing.onebox.common.model.dto.ImportUser;
 import com.turing.onebox.common.model.dto.LogInfo;
 import com.turing.onebox.common.utils.AjaxJson;
 import com.turing.onebox.common.utils.DateUtils;
@@ -9,13 +10,12 @@ import com.turing.onebox.common.utils.UUIDUtils;
 import com.turing.onebox.home.service.ClassInfoService;
 import com.turing.onebox.home.service.FileService;
 import com.turing.onebox.home.service.LogService;
+import org.apache.tomcat.util.bcel.classfile.Constant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
@@ -58,8 +58,6 @@ public class UploadController {
 
     /**
      * @Author HuangYuhan
-     * @param file
-     * @param dir 上传的虚拟路径
      * @return
      * @throws IOException
      * @Description name需要prefix，type需要判断，ext需要
@@ -73,8 +71,10 @@ public class UploadController {
      */
     @PostMapping("/file/upload/**")
     @ResponseBody
-    public AjaxJson<?> upload(@RequestParam MultipartFile file, Integer dir) throws IOException {
-        System.out.println(dir);
+    public AjaxJson<?> upload(ImportUser importUser, BindingResult bindingResult) throws IOException {
+        MultipartFile file = importUser.getFile();
+        System.out.println(file);
+        Integer dir = importUser.getId();
         // 判断上传的文件是否为空
         if (file == null || file.isEmpty()) {
             return AjaxJson.getError("文件为空，无法上传.");
@@ -82,7 +82,7 @@ public class UploadController {
         //将文件上传至指定路径
 //      获取文件全路径
         Path path = Paths.get(FILE_UPLOAD_PATH + file.getOriginalFilename());
-//        System.out.println(path.toString());
+        System.out.println(path.toString());
         byte[] bytes;
         try {
 //        获取文件流
@@ -93,7 +93,7 @@ public class UploadController {
             e.printStackTrace();
             return AjaxJson.getError("写入文件至指定路径失败");
         }
-        System.out.println("至此文件上传结束");
+        //System.out.println("至此文件上传结束");
 //        更新文件列表
 //        创建FileInfo类存储文件信息
         FileInfo fileInfo = new FileInfo();
@@ -116,15 +116,16 @@ public class UploadController {
             fileInfo.setType(className);
         }
 //        ---------------
-//        System.out.println(file.getSize());
-        int fileSize = Math.toIntExact(file.getSize() / (1024*1024));
-//        System.out.println(fileSize);
-//        System.out.println(fileSize/1024);
+        //System.out.println(file.getSize());
+        int fileSize = Math.toIntExact(file.getSize() / 1024);
+        //System.out.println(fileSize);
+        //System.out.println(fileSize/1024);
         fileInfo.setSize(fileSize);
+        fileInfo.setCreateTime(DateUtils.formateDateTime(new Date()));
 //        -------------------
         fileInfo.setRealPath(FILE_UPLOAD_PATH + file.getOriginalFilename());
-        fileInfo.setInRecycled(0);
-        fileInfo.setStar(0);
+        fileInfo.setInRecycled(OneboxConstant.NOT_IN_RECYCLED);
+        fileInfo.setStar(OneboxConstant.IS_NOT_STARRED);
 //        通过service层存储File信息
 
 //        更新日志信息 1.创建日志信息 2.通过logservice存储
@@ -154,9 +155,10 @@ public class UploadController {
 
 
     /*根据后缀返回类型*/
-    public String getClassNameByExt(String originName, ClassInfoService classInfoService) {
+    public String getClassNameByExt(String ext, ClassInfoService classInfoService) {
 //        删去后缀的那个点
-        String ext = originName.substring(1, originName.length());
+        //String ext = originName.substring(1, originName.length());
+
         try {
             String className = classInfoService.queryClassNameByExt(ext);
             if (className != null) {

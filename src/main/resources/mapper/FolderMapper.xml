@@ -52,4 +52,8 @@
     select *
     from folder where dir = #{dir,jdbcType=INTEGER} and in_recycled = 0
   </select>
+  <select id="selectFolderByIdAndPassword" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select *
+    from folder where id = #{id,jdbcType=INTEGER} and password=#{password,jdbcType=VARCHAR}
+  </select>
 </mapper>

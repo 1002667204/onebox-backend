@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface FolderMapper {
@@ -21,6 +22,9 @@ public interface FolderMapper {
     int editFolderRecycledById(Integer id);
 
     List<Folder> selectFolderByDir(Integer id);
+
+    Folder selectFolderByIdAndPassword(Map<String ,Object> map);
+
 
 
 }

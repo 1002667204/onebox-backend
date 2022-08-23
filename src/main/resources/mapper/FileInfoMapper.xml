@@ -81,4 +81,5 @@
      set in_recycled = 1
     where dir =#{id,jdbcType=INTEGER}
   </update>
+
 </mapper>

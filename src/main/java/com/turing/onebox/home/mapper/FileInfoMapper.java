@@ -46,27 +46,6 @@ public interface FileInfoMapper {
     Integer newFolder(Folder folder);
 
 
-    /**
-     * 标记文件为已删除
-     * @param id
-     * @return
-     */
-    @Update("update file set in_recycled = 1")
-    Integer deleteFile(Integer id);
-
-    /**
-     * 标记文件夹为已删除
-     * @param id
-     * @return
-     */
-    @Update("update folder set in_recycled = 1")
-    boolean deleteFolder(Integer id);
-
-    /**
-     * 在回收站中创建记录
-     */
-    @Insert("insert into recycled values(#{id}, #{delete_time}, #{destory_time}, #{file_id})")
-    Integer newRecycledInfo(RecycledInfo recycledInfo);
 
     /**
      * 根据文件夹id删除文件
@@ -119,7 +98,7 @@ public interface FileInfoMapper {
      * @param fileInfo
      * @return
      */
-    @Insert("insert into starred values(#{id}, #{name}, #{dir}, #{type}, #{ext}, #{size}, #{real_Path}, #{inRecycled}, #{star})")
+    @Insert("insert into starred values(#{id}, #{name}, #{dir}, #{type}, #{ext}, #{size}, #{realPath}, #{inRecycled}, #{createTime})")
     Integer starredFile(FileInfo fileInfo);
 
     /**
