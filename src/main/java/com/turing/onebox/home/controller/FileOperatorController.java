@@ -80,7 +80,7 @@ public class FileOperatorController {
     @PostMapping("/delete/folder")
     public AjaxJson<?> deleteFolder(Integer id) {
         Folder folder = fileService.queryFolderById(id);
-        if (Objects.equals(folder.getId(), OneboxConstant.NOT_IN_RECYCLED)) {
+        if (Objects.equals(folder.getInRecycled(), OneboxConstant.NOT_IN_RECYCLED)) {
             if (fileService.deleteFolder(id)) {
                 return AjaxJson.getSuccess("删除成功");
             }
