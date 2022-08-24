@@ -1,4 +1,6 @@
 package com.turing.onebox.admin.controller;
+import cn.dev33.satoken.stp.SaTokenInfo;
+import cn.dev33.satoken.stp.StpUtil;
 import com.turing.onebox.admin.service.InitService;
 import com.turing.onebox.admin.service.UserService;
 import com.turing.onebox.common.constant.OneboxConstant;
@@ -46,7 +48,13 @@ public class LoginController {
             return AjaxJson.getError("账号或密码错误，请重试");
         } else {
             //把user保存到session中
-            session.setAttribute("sessionUser",user);
+//            session.setAttribute("sessionUser",user);
+
+            // 使用Sa-Token登录
+            StpUtil.login("admin");
+            SaTokenInfo tokenInfo = StpUtil.getTokenInfo();
+            System.out.println(tokenInfo);
+
 
             //如果需要记住密码，则往外写cookie
            /* if("true".equals(isRemPwd)){
@@ -65,6 +73,7 @@ public class LoginController {
                 c2.setMaxAge(0);
                 response.addCookie(c2);
             }*/
+
             // 初始化根目录
             if (!initService.checkRootDir()){
                 return AjaxJson.getError("初始化根目录失败");
@@ -80,6 +89,7 @@ public class LoginController {
      */
     @PostMapping("/logout")
     public AjaxJson<?> doLogout(){
-        return AjaxJson.getSuccess();
+        StpUtil.logout();
+        return AjaxJson.getSuccess("注销成功");
     }
 }
