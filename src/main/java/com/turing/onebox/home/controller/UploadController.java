@@ -39,11 +39,10 @@ import java.util.Date;
 public class UploadController {
     /*
      * 文件上传路径
-     * 在配置里修改
      *
      * */
-    @Value("${huang.file.upload.path}")
-    public   String FILE_UPLOAD_PATH;
+//    @Value("${huang.file.upload.path}")
+    public String FILE_UPLOAD_PATH = OneboxConstant.ROOT_FILE_PATH;
 
     @Resource
     private HttpServletRequest httpServletRequest;
@@ -79,26 +78,16 @@ public class UploadController {
         if (file == null || file.isEmpty()) {
             return AjaxJson.getError("文件为空，无法上传.");
         }
-        //将文件上传至指定路径
-//      获取文件全路径
-//        Path path = Paths.get(FILE_UPLOAD_PATH + file.getOriginalFilename());
+        // 检查上传路径（根文件夹）是否存在，不存在则创建
+        File rootFolder = new File(FILE_UPLOAD_PATH);
+        if (!rootFolder.exists()) {
+//            System.out.println("根文件夹不存在");
+            if (!rootFolder.mkdir()) {
+                return AjaxJson.getError("根文件夹创建失败");
+            }
+        }
 
-        //tagzzzzzzzzzz
-//        Path path = Paths.get(OneboxConstant.ROOT_FILE_PATH + OneboxConstant.PATH_SEPARATOR + file.getOriginalFilename());
-//
-//        System.out.println(path.toString());
-//        byte[] bytes;
-//        try {
-////        获取文件流
-//            bytes = file.getBytes();
-////        将文件写入指定路径
-//            Files.write(path, bytes);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            return AjaxJson.getError("写入文件至指定路径失败");
-//        }
-//        //System.out.println("至此文件上传结束");
-        //tagzzzzzzzzzz
+        //将文件上传至指定路径
 
 //        更新文件列表
 //        创建FileInfo类存储文件信息

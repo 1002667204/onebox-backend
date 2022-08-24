@@ -48,7 +48,7 @@ public class OneboxConstant {
     /**
      * 系统保存文件的根目录
      */
-    public static String ROOT_FILE_PATH = System.getProperty("user.dir") + PATH_SEPARATOR + "onebox_files";
+    public static String ROOT_FILE_PATH = System.getProperty("user.dir") + PATH_SEPARATOR + "onebox_files" + PATH_SEPARATOR;
 
 
     /**

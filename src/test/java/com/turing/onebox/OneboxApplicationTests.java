@@ -2,6 +2,7 @@ package com.turing.onebox;
 
 import com.turing.onebox.admin.mapper.ClassInfoMapper;
 import com.turing.onebox.admin.mapper.SettingMapper;
+import com.turing.onebox.common.constant.OneboxConstant;
 import com.turing.onebox.common.model.dto.ClassInfo;
 import com.turing.onebox.common.utils.UUIDUtils;
 import org.junit.jupiter.api.Test;
@@ -56,5 +57,14 @@ class OneboxApplicationTests {
     @Test
     void testFileSeparator(){
         System.out.println(File.separator);
+    }
+
+    @Test
+    void testRootPath(){
+        System.out.println(OneboxConstant.ROOT_FILE_PATH);
+        File file = new File(OneboxConstant.ROOT_FILE_PATH);
+        if (!file.exists()){
+            file.mkdir();
+        }
     }
 }
