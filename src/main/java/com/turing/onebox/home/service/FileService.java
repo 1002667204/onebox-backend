@@ -67,7 +67,7 @@ public class FileService {
         return fileInfoMapper.selectByPrimaryKey(id);
     }
     public Folder queryFolderById(Integer id){
-        return folderMapper.selectByPrimaryKey(id);
+        return folderMapper.selectFolderById(id);
     }
     /**
      *
@@ -138,7 +138,7 @@ public class FileService {
         // 删除文件表中的记录
         if (fileInfoMapper.deleteByPrimaryKey(id) == 0) return false;
         // 删除回收站中的记录
-        if (recycledInfoMapper.deleteByFileId(id) == 0) return false;
+        recycledInfoMapper.deleteByFileId(id);
         // 删除本地文件
         File file = new File(path);
         return file.delete();
@@ -168,13 +168,14 @@ public class FileService {
     public boolean removeFolder(Integer id){
         // 删除文件夹表中的记录
         if (folderMapper.deleteByPrimaryKey(id) == 0) return false;
+        recycledInfoMapper.deleteByFileId(id);
         // 彻底删除文件夹内的文件
         int count = 0;
-        for (FileInfo fileInfo : fileInfoMapper.selectFileByDir(id)) {
+        for (FileInfo fileInfo : fileInfoMapper.getFileInfoByDirId(id)) {
             if (removeFile(fileInfo.getId())) count++;
         }
         // 删除文件夹内的文件夹
-        List<Folder> folders = folderMapper.selectFolderByDir(id);
+        List<Folder> folders = folderMapper.getFolderByDirId(id);
         if (folders != null){
             for (Folder folder: folders){
                 if (removeFolder(folder.getId())) count++;
@@ -192,11 +193,12 @@ public class FileService {
      * @return
      */
     public boolean renameFile(Integer id, String newName) {
+        FileInfo fileInfo = fileInfoMapper.selectByPrimaryKey(id);
         //先判断 文件名 是否改变
-        if (newName.equals(fileInfoMapper.getFileNameById(id))) {
+        if (newName.equals(fileInfo.getName())) {
             return false;
         }
-        return fileInfoMapper.renameFile(id, newName) == 1;
+        return fileInfoMapper.renameFile(id, newName)==1;
     }
 
     /**
@@ -263,7 +265,7 @@ public class FileService {
      */
     public boolean starredFolder(Integer id, Integer starred){
         // 获取文件夹星标状态
-        Folder folder = folderMapper.selectByPrimaryKey(id);
+        Folder folder = folderMapper.selectFolderById(id);
         if (Objects.equals(folder.getStar(), starred)) return false;
         // 修改文件夹星标字段
         folder.setStar(starred);
@@ -303,5 +305,22 @@ public class FileService {
         }else{
             return false;
         }
+    }
+
+    /**
+     * 修改对应文件的dir属性
+     */
+    public boolean editDirByFileId(Integer sourceId,Integer targetId){
+        FileInfo fileInfo = queryFileById(sourceId);
+        //源Id是一个文件时
+        if (fileInfo != null){
+            //修改文件列表中的dir属性
+            return fileInfoMapper.updateDirByFileId(sourceId,targetId) == 1;
+
+        }else {
+            //修改文件列表中的dir属性
+            return folderMapper.updateDirByFolderId(sourceId,targetId) == 1;
+        }
+
     }
 }

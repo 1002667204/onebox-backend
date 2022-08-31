@@ -50,14 +50,14 @@ public class RecycledController {
      * 删除回收站中的某一个文件 AjaxJson.getSuccess()
      * 先删除服务器上的文件，再删除数据库中的记录
      */
-    @PostMapping("/delete")
+    /*@PostMapping("/delete")
     public AjaxJson<?> completelyDeleteFile(Integer id){
         if (recycledService.completelyDeleteFile(id)){
             return AjaxJson.getSuccess();
         }
 
         return AjaxJson.getError();
-    }
+    }*/
 
 
     /**

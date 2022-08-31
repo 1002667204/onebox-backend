@@ -34,8 +34,8 @@
       star = #{star,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select id, name, dir, secret, in_recycled, password, star, create_time
+  <select id="selectFolderById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select *
     from folder
     where id = #{id,jdbcType=INTEGER}
   </select>
@@ -48,10 +48,20 @@
       set in_recycled =1
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <update id="updateDirByFolderId" parameterType="java.lang.Integer">
+    update folder
+    set dir = #{targetId,jdbcType=INTEGER}
+    where id = #{sourceId,jdbcType=INTEGER}
+  </update>
   <select id="selectFolderByDir" resultType="com.turing.onebox.common.model.dto.Folder">
     select *
     from folder where dir = #{dir,jdbcType=INTEGER} and in_recycled = 0
     order by create_time desc
+  </select>
+  <select id="getFolderByDirId"  resultMap="BaseResultMap">
+    select *
+    from folder
+    where dir = #{id,jdbcType=INTEGER}
   </select>
   <select id="selectFolderByIdAndPassword" parameterType="java.util.Map" resultMap="BaseResultMap">
     select *

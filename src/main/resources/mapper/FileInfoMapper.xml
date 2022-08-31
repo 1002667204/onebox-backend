@@ -77,6 +77,11 @@
       set in_recycled = 1
     where id=#{id,jdbcType=INTEGER}
   </update>
+  <update id="updateDirByFileId" parameterType="java.lang.Integer">
+    update file
+    set dir =#{targetId,jdbcType=INTEGER}
+    where id=#{sourceId,jdbcType=INTEGER}
+  </update>
   <update id="editFileRecycledByFolderId" parameterType="java.lang.Integer">
     update file
      set in_recycled = 1

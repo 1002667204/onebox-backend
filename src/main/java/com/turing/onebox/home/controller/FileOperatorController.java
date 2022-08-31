@@ -146,4 +146,23 @@ public class FileOperatorController {
             return AjaxJson.getError("设置星标状态失败");
         }
 
+    /**
+     * 剪切文件或文件夹
+     * 源Id sourceId （既可以是文件也可以是文件夹）
+     * 目标Id targetId（只能是文件夹）
+     */
+    @PostMapping("/cut")
+    public AjaxJson<?> cut(Integer sourceId ,Integer targetId){
+
+        if (fileService.editDirByFileId(sourceId,targetId)){
+            return AjaxJson.getSuccess();
+        }
+
+        return AjaxJson.getError("剪切失败");
     }
+    @PostMapping("/copy")
+    public AjaxJson<?> copy(Integer sourceId,Integer targetId){
+        return null;
+    }
+
+}

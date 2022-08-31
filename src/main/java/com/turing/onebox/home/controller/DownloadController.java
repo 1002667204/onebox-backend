@@ -2,8 +2,12 @@ package com.turing.onebox.home.controller;
 
 import cn.hutool.core.io.FileUtil;
 import com.turing.onebox.common.model.dto.FileInfo;
+import com.turing.onebox.common.model.dto.LogInfo;
 import com.turing.onebox.common.utils.AjaxJson;
+import com.turing.onebox.common.utils.DateUtils;
+import com.turing.onebox.common.utils.UUIDUtils;
 import com.turing.onebox.home.service.DownloadService;
+import com.turing.onebox.home.service.LogService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Date;
 
 /**
  * @ClassName DownloadController
@@ -30,6 +35,9 @@ public class DownloadController {
 
     @Resource
     private DownloadService downloadService;
+
+    @Resource
+    private LogService logService;
 
 
     /**
@@ -54,6 +62,13 @@ public class DownloadController {
         byte[] readBytes = FileUtil.readBytes(file);
         OutputStream os = response.getOutputStream();
         os.write(readBytes);
+        //添加日志
+        LogInfo logInfo = new LogInfo();
+        logInfo.setId(UUIDUtils.getUUID());
+        logInfo.setFileName(fileInfo.getName());
+        logInfo.setMethod(0);
+        logInfo.setModifyTime(DateUtils.formateDate(new Date()));
+        logService.addLogInfo(logInfo);
         return AjaxJson.getSuccess();
 
     }

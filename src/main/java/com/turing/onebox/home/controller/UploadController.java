@@ -1,12 +1,12 @@
 package com.turing.onebox.home.controller;
 
 import com.turing.onebox.common.constant.OneboxConstant;
+import com.turing.onebox.common.exception.NoTypeException;
 import com.turing.onebox.common.model.dto.FileInfo;
 import com.turing.onebox.common.model.dto.ImportUser;
 import com.turing.onebox.common.model.dto.LogInfo;
-import com.turing.onebox.common.utils.AjaxJson;
-import com.turing.onebox.common.utils.DateUtils;
-import com.turing.onebox.common.utils.UUIDUtils;
+
+import com.turing.onebox.common.utils.*;
 import com.turing.onebox.home.service.ClassInfoService;
 import com.turing.onebox.home.service.FileService;
 import com.turing.onebox.home.service.LogService;
@@ -39,6 +39,7 @@ import java.util.Date;
 public class UploadController {
     /*
      * 文件上传路径
+     * 在配置里修改
      *
      * */
 //    @Value("${huang.file.upload.path}")
@@ -54,6 +55,9 @@ public class UploadController {
 
     @Autowired
     private ClassInfoService classInfoService;
+
+    @Autowired
+    private FileInfoUtils fileInfoUtils;
 
     /**
      * @Author HuangYuhan
@@ -78,6 +82,16 @@ public class UploadController {
         if (file == null || file.isEmpty()) {
             return AjaxJson.getError("文件为空，无法上传.");
         }
+//        更新文件列表
+//      封装FileINfo信息
+        FileInfo fileInfo = null;
+        try {
+            fileInfo = fileInfoUtils.encapsulateFileInfo(importUser);
+        } catch (NoTypeException e) {
+            e.printStackTrace();
+//            返回：根据后缀找不到类型异常
+            return AjaxJson.getError(e.getValue());
+        }
         // 检查上传路径（根文件夹）是否存在，不存在则创建
         File rootFolder = new File(FILE_UPLOAD_PATH);
         if (!rootFolder.exists()) {
@@ -91,14 +105,14 @@ public class UploadController {
 
 //        更新文件列表
 //        创建FileInfo类存储文件信息
-        FileInfo fileInfo = new FileInfo();
+//        FileInfo fileInfo = new FileInfo();
         String fileName =file.getOriginalFilename().substring(0,file.getOriginalFilename().lastIndexOf("."));
         //  设置每个文件的唯一文件名
         Integer onlyId = UUIDUtils.getUUID();
         String fileOnlyName = fileName + onlyId;
         fileInfo.setName(fileName);
 //        检查文件是否重命名，如果名字已经存在，则直接不允许存储
-        boolean flag = fileService.queryFileByFileNameAndDir(fileName, dir);
+        boolean flag = fileService.queryFileByFileNameAndDir(fileInfo.getName(), dir);
         if (!flag) {
             return AjaxJson.getError("文件名已经存在于该文件夹，上传失败");
         }
@@ -130,7 +144,7 @@ public class UploadController {
 //        更新日志信息 1.创建日志信息 2.通过logservice存储
         LogInfo logInfo = new LogInfo();
         logInfo.setId(UUIDUtils.getUUID());
-        logInfo.setFileName(fileName);
+        logInfo.setFileName(fileInfo.getName());
         logInfo.setMethod(1);
         logInfo.setModifyTime(DateUtils.formateDate(new Date()));
 
@@ -138,10 +152,11 @@ public class UploadController {
             boolean fileFlag = fileService.uploadFile(fileInfo);
             boolean logFlag = logService.addLogInfo(logInfo);
             if (fileFlag && logFlag) {
-                // 影响行数为1表示插入文件在数据库成功
-                // 将文件上传至指定路径
-	            // 获取文件全路径:路径+文件名+唯一id+后缀
-                Path path = Paths.get(FILE_UPLOAD_PATH +fileOnlyName+fileSuffix);
+//                影响行数为1表示插入文件在数据库成功
+                //将文件上传至指定路径
+//               获取文件的
+//      获取文件全路径:路径+文件名+唯一id+后缀
+                Path path = Paths.get(fileInfo.getRealPath());
                 System.out.println(path.toString());
                 byte[] bytes;
                 try {

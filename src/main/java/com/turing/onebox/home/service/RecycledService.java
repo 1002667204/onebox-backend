@@ -56,7 +56,7 @@ public class RecycledService {
                     //删除回收站记录
                     recycledInfoMapper.deleteByPrimaryKey(id);
                     //删除文件夹表和文件表记
-                    //缺少删除实际文件方法
+
                     if (1 == fileInfoMapper.deleteByPrimaryKey(recycledInfo.getFileId())){
                         fileService.removeFile(id);
                     }else {
@@ -71,8 +71,10 @@ public class RecycledService {
                     if (fileInfo != null){
                         fileItems.add(new FileItem(fileInfo));
                     }else {
-                        Folder folder = folderMapper.selectByPrimaryKey(recycledInfo.getFileId());
-                        fileItems.add(new FileItem(folder));
+                        Folder folder = folderMapper.selectFolderById(recycledInfo.getFileId());
+                        if (folder != null){
+                            fileItems.add(new FileItem(folder));
+                        }
                     }
                 }
 
@@ -92,8 +94,7 @@ public class RecycledService {
                 //删除回收站记录
                 recycledInfoMapper.deleteByPrimaryKey(recycledInfo.getId());
                 //删除文件夹表和文件表记录
-                //缺少删除实际文件方法
-                if (1 == fileInfoMapper.deleteByPrimaryKey(recycledInfo.getFileId())){
+                if (fileInfoMapper.selectByPrimaryKey(recycledInfo.getFileId()) != null){
                     fileService.removeFile(recycledInfo.getFileId());
                 }else {
                     folderMapper.deleteByPrimaryKey(recycledInfo.getFileId());

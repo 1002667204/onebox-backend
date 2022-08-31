@@ -33,6 +33,10 @@ public class LogService {
 
     }
 
+    /**
+     * 获取所有的操作日志
+     * @return
+     */
     public List<LogInfo> queryAllLog(){
         return logInfoMapper.selectAll();
     }

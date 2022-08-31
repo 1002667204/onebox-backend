@@ -38,6 +38,10 @@ public interface FileInfoMapper {
     List<StarredInfo> starredList();
 
     /**
+     * 根据Id修改文件Dir属性
+     */
+    int updateDirByFileId(Integer sourceId,Integer targetId);
+    /**
      * 新建文件夹
      * @param folder
      * @return

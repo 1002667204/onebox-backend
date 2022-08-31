@@ -13,15 +13,18 @@ public interface FolderMapper {
 
     int insert(Folder record);
 
-    Folder selectByPrimaryKey(Integer id);
+    Folder selectFolderById(Integer id);
 
     List<Folder> selectAll();
 
     int updateByPrimaryKey(Folder record);
 
+    int updateDirByFolderId(Integer sourceId,Integer targetId);
+
     int editFolderRecycledById(Integer id);
 
     List<Folder> selectFolderByDir(Integer id);
+    List<Folder> getFolderByDirId(Integer id);
 
     Folder selectFolderByIdAndPassword(Map<String ,Object> map);
 
